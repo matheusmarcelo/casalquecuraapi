@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import type { ICustomerRepository } from 'src/constants/contracts/customer/ICustomerRepository.contract';
 import { ICustomerService } from 'src/constants/contracts/customer/ICustomerService.contract';
-import { DITokens } from 'src/constants/enums/DITokens/DITokens.enum';
+import { DITokensRepository } from 'src/constants/enums/DITokens/DITokens.enum';
 import { CustomerDto } from 'src/dtos/customer/customer.dto';
 import { FindCustomersDto } from 'src/dtos/customer/findCustomers.dto';
 import { Customer } from 'src/entitites/customer/customer.entity';
@@ -10,7 +10,7 @@ import { Customer } from 'src/entitites/customer/customer.entity';
 export class CustomerService implements ICustomerService {
 
     constructor(
-        @Inject(DITokens.CUSTOMER_REPOSITORY)
+        @Inject(DITokensRepository.CUSTOMER_REPOSITORY)
         private readonly customerRepository: ICustomerRepository
     ) { }
 
@@ -34,7 +34,7 @@ export class CustomerService implements ICustomerService {
         return customer;
     }
 
-    async getCustomersAsync(params?: FindCustomersDto): Promise<Customer[]> {
+    async getCustomersAsync(params: FindCustomersDto): Promise<Customer[]> {
         return await this.customerRepository.getCustomersAsync(params);
     }
 
