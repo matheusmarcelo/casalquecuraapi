@@ -1,6 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ICustomerRepository } from 'src/constants/contracts/ICustomerRepository.contract';
+import { ICustomerRepository } from 'src/constants/contracts/customer/ICustomerRepository.contract';
+import { CustomerDto } from 'src/dtos/customer/customer.dto';
 import { FindCustomersDto } from 'src/dtos/customer/findCustomers.dto';
 import { Customer } from 'src/entitites/customer/customer.entity';
 import { FindOptions, FindOptionsWhere, Like, Repository } from 'typeorm';
@@ -13,7 +14,7 @@ export class CustomerRepositoryPostgresql implements ICustomerRepository {
         private readonly customerRepository: Repository<Customer>
     ) { }
 
-    async createCustomerAsync(customer: Customer): Promise<void> {
+    async createCustomerAsync(customer: CustomerDto): Promise<void> {
         await this.customerRepository.save(customer);
     }
 
@@ -47,7 +48,7 @@ export class CustomerRepositoryPostgresql implements ICustomerRepository {
         const customer = await this.customerRepository.findOne({ where: { id } });
 
         if (!customer) {
-            throw new HttpException('Customer not found', HttpStatus.BAD_REQUEST);
+            throw new HttpException('Customer not found', HttpStatus.NOT_FOUND);
         }
 
         customer.isActive = false;
