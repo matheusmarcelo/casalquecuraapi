@@ -3,6 +3,11 @@
 /node_modules
 /build
 
+/src/infra/postgresql/migrations
+
+docker-compose.yml
+.env
+
 # Logs
 logs
 *.log
