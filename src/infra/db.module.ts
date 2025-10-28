@@ -5,6 +5,7 @@ import { CustomerRepositoryPostgresql } from './postgresql/repositories/customer
 import { Customer } from 'src/entitites/customer/customer.entity';
 import { DITokensRepository } from 'src/constants/enums/DITokens/DITokens.enum';
 import { ActivityRepositoryPostgresql } from './postgresql/repositories/activity/activity-repository-postgresql.repository';
+import { Activity } from 'src/entitites/activity/activity.entity';
 
 const repositoryProviders = [
     {
@@ -34,7 +35,7 @@ const repositoryProviders = [
             }),
             inject: [ConfigService],
         }),
-        TypeOrmModule.forFeature([Customer]),
+        TypeOrmModule.forFeature([Customer, Activity]),
     ],
     providers: [...repositoryProviders],
     exports: [...repositoryProviders],
