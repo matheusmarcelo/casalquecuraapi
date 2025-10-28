@@ -4,7 +4,6 @@ exports.Customers1761531694724 = void 0;
 const typeorm_1 = require("typeorm");
 class Customers1761531694724 {
     async up(queryRunner) {
-        await queryRunner.query(`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`);
         await queryRunner.createTable(new typeorm_1.Table({
             name: "users",
             columns: [
@@ -12,8 +11,7 @@ class Customers1761531694724 {
                     name: "id",
                     type: "uuid",
                     isPrimary: true,
-                    generationStrategy: "uuid",
-                    default: "uuid_generate_v4()",
+                    isNullable: false
                 },
                 {
                     name: "name",

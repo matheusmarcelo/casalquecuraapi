@@ -1,6 +1,7 @@
 import { CustomerActivity } from "../customer-activity/customer-activity.entity";
 export declare class Customer {
     id?: string;
+    generateId(): void;
     name: string;
     email: string;
     password: string;

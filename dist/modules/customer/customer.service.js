@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.CustomerService = void 0;
 const common_1 = require("@nestjs/common");
 const DITokens_enum_1 = require("../../constants/enums/DITokens/DITokens.enum");
+const customer_entity_1 = require("../../entitites/customer/customer.entity");
 const bcrypt_1 = require("bcrypt");
 let CustomerService = class CustomerService {
     customerRepository;
@@ -27,13 +28,12 @@ let CustomerService = class CustomerService {
             throw new common_1.HttpException('Customer alredy created', common_1.HttpStatus.BAD_REQUEST);
         }
         const saltOrRounds = 12;
-        const customerEntity = {
-            name: customerDto.name,
-            email: customerDto.email,
-            date_of_birth: customerDto.date_of_birth,
-            phone: customerDto.phone,
-            password: (0, bcrypt_1.hashSync)(customerDto.password, saltOrRounds),
-        };
+        const customerEntity = new customer_entity_1.Customer();
+        customerEntity.name = customerDto.name;
+        customerEntity.email = customerDto.email;
+        customerEntity.date_of_birth = customerDto.date_of_birth;
+        customerEntity.phone = customerDto.phone;
+        customerEntity.password = (0, bcrypt_1.hashSync)(customerDto.password, saltOrRounds);
         await this.customerRepository.createCustomerAsync(customerEntity);
     }
     async getCustomerByIdAsync(id) {

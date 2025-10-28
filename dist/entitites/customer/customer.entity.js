@@ -13,8 +13,14 @@ exports.Customer = void 0;
 const userRole_enum_1 = require("../../constants/enums/userRole.enum");
 const typeorm_1 = require("typeorm");
 const customer_activity_entity_1 = require("../customer-activity/customer-activity.entity");
+const uuid_1 = require("uuid");
 let Customer = class Customer {
     id;
+    generateId() {
+        if (!this.id) {
+            this.id = (0, uuid_1.v4)();
+        }
+    }
     name;
     email;
     password;
@@ -34,9 +40,15 @@ let Customer = class Customer {
 };
 exports.Customer = Customer;
 __decorate([
-    (0, typeorm_1.PrimaryGeneratedColumn)("uuid"),
+    (0, typeorm_1.PrimaryColumn)("uuid"),
     __metadata("design:type", String)
 ], Customer.prototype, "id", void 0);
+__decorate([
+    (0, typeorm_1.BeforeInsert)(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], Customer.prototype, "generateId", null);
 __decorate([
     (0, typeorm_1.Column)({ type: "varchar", length: 255 }),
     __metadata("design:type", String)
