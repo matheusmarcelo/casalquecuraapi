@@ -24,14 +24,12 @@ export class CustomerService implements ICustomerService {
 
         const saltOrRounds = 12;
 
-        const customerEntity: Customer = {
-            name: customerDto.name,
-            email: customerDto.email,
-            date_of_birth: customerDto.date_of_birth,
-            phone: customerDto.phone,
-            password: bcryptHashSync(customerDto.password, saltOrRounds),
-
-        }
+        const customerEntity = new Customer();
+        customerEntity.name = customerDto.name;
+        customerEntity.email = customerDto.email;
+        customerEntity.date_of_birth = customerDto.date_of_birth;
+        customerEntity.phone = customerDto.phone;
+        customerEntity.password = bcryptHashSync(customerDto.password, saltOrRounds);
 
         await this.customerRepository.createCustomerAsync(customerEntity);
     }
