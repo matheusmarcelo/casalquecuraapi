@@ -49,10 +49,22 @@ export class CustomerService implements ICustomerService {
     }
 
     async updateCustomerAsync(id: string, customer: Customer): Promise<void> {
+        const customerFound = await this.customerRepository.getCustomerByIdAsync(id);
+
+        if (!customerFound) {
+            throw new HttpException('Customer not found', HttpStatus.NOT_FOUND);
+        }
+
         await this.customerRepository.updateCustomerAsync(id, customer);
     }
 
     async disableCustomerAsync(id: string): Promise<void> {
+        const customer = await this.customerRepository.getCustomerByIdAsync(id);
+
+        if (!customer) {
+            throw new HttpException('Customer not found', HttpStatus.NOT_FOUND);
+        }
+
         await this.customerRepository.disableCustomerAsync(id);
     }
 }
