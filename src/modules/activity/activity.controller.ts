@@ -19,7 +19,7 @@ export class ActivityController {
 
   @Put('/:id')
   @HttpCode(HttpStatus.OK)
-  async updateActivityAsync(@Param('id') id: string, activity: Activity): Promise<void> {
+  async updateActivityAsync(@Param('id') id: string, @Body() activity: Activity): Promise<void> {
     await this.activityService.updateActivityAsync(id, activity);
   }
 
