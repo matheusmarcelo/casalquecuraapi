@@ -16,119 +16,30 @@ export class CustomerController {
     @Post('')
     @HttpCode(HttpStatus.CREATED)
     async createCustomerAsync(@Body() customer: CustomerDto): Promise<void> {
-        try {
-            await this.customerService.createCustomerAsync(customer);
-
-        } catch (error: any) {
-            // 🧠 Caso já seja um erro do Nest (por ex. BadRequestException)
-            if (error instanceof HttpException) {
-                throw error;
-            }
-
-            // 🧩 Caso o serviço tenha lançado um erro conhecido
-            if (error.name === 'BadRequestException') {
-                throw new BadRequestException(error.message);
-            }
-
-            // 💥 Caso seja um erro inesperado (bug, falha de DB etc.)
-            throw new InternalServerErrorException(
-                error.message || 'Erro interno no servidor',
-            );
-        }
+        await this.customerService.createCustomerAsync(customer);
     }
 
     @Put('/:id')
     @HttpCode(HttpStatus.OK)
     async updateCustomerAsync(@Param('id') id: string, @Body() customer: Customer): Promise<void> {
-        try {
-            await this.customerService.updateCustomerAsync(id, customer);
-
-        } catch (error: any) {
-            // 🧠 Caso já seja um erro do Nest (por ex. BadRequestException)
-            if (error instanceof HttpException) {
-                throw error;
-            }
-
-            // 🧩 Caso o serviço tenha lançado um erro conhecido
-            if (error.name === 'BadRequestException') {
-                throw new BadRequestException(error.message);
-            }
-
-            // 💥 Caso seja um erro inesperado (bug, falha de DB etc.)
-            throw new InternalServerErrorException(
-                error.message || 'Erro interno no servidor',
-            );
-        }
+        await this.customerService.updateCustomerAsync(id, customer);
     }
 
     @Get('/:id')
     async getCustomerAsync(@Param('id') id: string) {
-        try {
-            const customer = await this.customerService.getCustomerByIdAsync(id);
-            return customer;
-        } catch (error: any) {
-            // 🧠 Caso já seja um erro do Nest (por ex. BadRequestException)
-            if (error instanceof HttpException) {
-                throw error;
-            }
-
-            // 🧩 Caso o serviço tenha lançado um erro conhecido
-            if (error.name === 'BadRequestException') {
-                throw new BadRequestException(error.message);
-            }
-
-            // 💥 Caso seja um erro inesperado (bug, falha de DB etc.)
-            throw new InternalServerErrorException(
-                error.message || 'Erro interno no servidor',
-            );
-        }
+        const customer = await this.customerService.getCustomerByIdAsync(id);
+        return customer;
     }
 
     @Get('')
     async getCustomersAsync(@Query() params: FindCustomersDto) {
-        try {
-            const customers = await this.customerService.getCustomersAsync(params);
-            return customers;
-
-        } catch (error: any) {
-            // 🧠 Caso já seja um erro do Nest (por ex. BadRequestException)
-            if (error instanceof HttpException) {
-                throw error;
-            }
-
-            // 🧩 Caso o serviço tenha lançado um erro conhecido
-            if (error.name === 'BadRequestException') {
-                throw new BadRequestException(error.message);
-            }
-
-            // 💥 Caso seja um erro inesperado (bug, falha de DB etc.)
-            throw new InternalServerErrorException(
-                error.message || 'Erro interno no servidor',
-            );
-        }
+        const customers = await this.customerService.getCustomersAsync(params);
+        return customers;
     }
 
     @Post('/:id/disable')
     @HttpCode(HttpStatus.OK)
     async disableCustomerAsync(@Param('id') id: string) {
-        try {
-            await this.customerService.disableCustomerAsync(id);
-
-        } catch (error: any) {
-            // 🧠 Caso já seja um erro do Nest (por ex. BadRequestException)
-            if (error instanceof HttpException) {
-                throw error;
-            }
-
-            // 🧩 Caso o serviço tenha lançado um erro conhecido
-            if (error.name === 'BadRequestException') {
-                throw new BadRequestException(error.message);
-            }
-
-            // 💥 Caso seja um erro inesperado (bug, falha de DB etc.)
-            throw new InternalServerErrorException(
-                error.message || 'Erro interno no servidor',
-            );
-        }
+        await this.customerService.disableCustomerAsync(id);
     }
 }
