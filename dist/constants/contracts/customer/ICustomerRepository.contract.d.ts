@@ -1,6 +1,5 @@
 import { FindCustomersDto } from "src/dtos/customer/findCustomers.dto";
 import { Customer } from "src/entitites/customer/customer.entity";
-
 export interface ICustomerRepository {
     createCustomerAsync(customer: Customer): Promise<void>;
     getCustomerByIdAsync(id: string): Promise<Customer | null>;

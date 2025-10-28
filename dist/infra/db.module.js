@@ -10,10 +10,20 @@ exports.DBModule = void 0;
 const common_1 = require("@nestjs/common");
 const config_1 = require("@nestjs/config");
 const typeorm_1 = require("@nestjs/typeorm");
+const customer_repository_postgresql_repository_1 = require("./postgresql/repositories/customer/customer-repository-postgresql.repository");
+const customer_entity_1 = require("../entitites/customer/customer.entity");
+const DITokens_enum_1 = require("../constants/enums/DITokens/DITokens.enum");
+const repositoryProviders = [
+    {
+        provide: DITokens_enum_1.DITokensRepository.CUSTOMER_REPOSITORY,
+        useClass: customer_repository_postgresql_repository_1.CustomerRepositoryPostgresql
+    }
+];
 let DBModule = class DBModule {
 };
 exports.DBModule = DBModule;
 exports.DBModule = DBModule = __decorate([
+    (0, common_1.Global)(),
     (0, common_1.Module)({
         imports: [
             typeorm_1.TypeOrmModule.forRootAsync({
@@ -24,13 +34,16 @@ exports.DBModule = DBModule = __decorate([
                     username: configService.get("DB_USERNAME"),
                     password: configService.get("DB_PASSWORD"),
                     database: configService.get("DB_NAME"),
-                    entities: ['dist/entities/**/*.js'],
+                    entities: [__dirname + '/../entitites/**/*.{js,ts}'],
                     migrations: [__dirname + '/migrations/**.ts'],
                     synchronize: false,
                 }),
                 inject: [config_1.ConfigService],
             }),
+            typeorm_1.TypeOrmModule.forFeature([customer_entity_1.Customer]),
         ],
+        providers: [...repositoryProviders],
+        exports: [...repositoryProviders],
     })
 ], DBModule);
 //# sourceMappingURL=db.module.js.map

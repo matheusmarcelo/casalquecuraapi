@@ -64,8 +64,8 @@ export class CustomerController {
     @Get('/:id')
     async getCustomerAsync(@Param('id') id: string) {
         try {
-            await this.customerService.getCustomerByIdAsync(id);
-
+            const customer = await this.customerService.getCustomerByIdAsync(id);
+            return customer;
         } catch (error: any) {
             // 🧠 Caso já seja um erro do Nest (por ex. BadRequestException)
             if (error instanceof HttpException) {
@@ -87,7 +87,8 @@ export class CustomerController {
     @Get('')
     async getCustomersAsync(@Query() params: FindCustomersDto) {
         try {
-            await this.customerService.getCustomersAsync(params);
+            const customers = await this.customerService.getCustomersAsync(params);
+            return customers;
 
         } catch (error: any) {
             // 🧠 Caso já seja um erro do Nest (por ex. BadRequestException)

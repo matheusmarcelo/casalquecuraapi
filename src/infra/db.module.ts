@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CustomerRepositoryPostgresql } from './postgresql/repositories/customer/customer-repository-postgresql.repository';
@@ -12,6 +12,7 @@ const repositoryProviders = [
     }
 ];
 
+@Global()
 @Module({
     imports: [
         TypeOrmModule.forRootAsync({
@@ -22,7 +23,7 @@ const repositoryProviders = [
                 username: configService.get<string>("DB_USERNAME"),
                 password: configService.get<string>("DB_PASSWORD"),
                 database: configService.get<string>("DB_NAME"),
-                entities: [__dirname + '/../entitites/**/*js.'],
+                entities: [__dirname + '/../entitites/**/*.{js,ts}'],
                 migrations: [__dirname + '/migrations/**.ts'],
                 synchronize: false,
             }),

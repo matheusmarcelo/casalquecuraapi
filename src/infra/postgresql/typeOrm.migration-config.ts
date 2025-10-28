@@ -14,7 +14,7 @@ const data_source_options: DataSourceOptions = {
     username: configService.get<string>("DB_USERNAME"),
     password: configService.get<string>("DB_PASSWORD"),
     database: configService.get<string>("DB_NAME"),
-    entities: [__dirname + '/../entitites/**/*.ts'],
+    entities: [__dirname + '/../entitites/**/*.{js,ts}'],
     migrations: [__dirname + '/migrations/*.ts'],
     synchronize: false
 }

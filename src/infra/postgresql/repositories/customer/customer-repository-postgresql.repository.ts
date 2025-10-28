@@ -4,7 +4,7 @@ import { ICustomerRepository } from 'src/constants/contracts/customer/ICustomerR
 import { CustomerDto } from 'src/dtos/customer/customer.dto';
 import { FindCustomersDto } from 'src/dtos/customer/findCustomers.dto';
 import { Customer } from 'src/entitites/customer/customer.entity';
-import { FindOptions, FindOptionsWhere, Like, Repository } from 'typeorm';
+import { FindOptionsWhere, ILike, Repository } from 'typeorm';
 
 @Injectable()
 export class CustomerRepositoryPostgresql implements ICustomerRepository {
@@ -26,11 +26,11 @@ export class CustomerRepositoryPostgresql implements ICustomerRepository {
         const searchParams: FindOptionsWhere<Customer> = {};
 
         if (params?.name) {
-            searchParams.name = Like(`%${params.name}%`);
+            searchParams.name = ILike(`%${params.name}%`);
         }
 
         if (params?.email) {
-            searchParams.email = Like(`%${params.email}%`);
+            searchParams.email = ILike(`%${params.email}%`);
         }
 
         const customers = await this.customerRepository.find({
@@ -53,7 +53,7 @@ export class CustomerRepositoryPostgresql implements ICustomerRepository {
 
         customer.isActive = false;
 
-        await this.customerRepository.update(id, customer);
+        await this.customerRepository.update(id, { isActive: false });
     }
 
     async getCustomerByEmail(email: string): Promise<Customer | null> {

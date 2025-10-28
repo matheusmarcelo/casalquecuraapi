@@ -5,6 +5,7 @@ import { DITokensRepository } from 'src/constants/enums/DITokens/DITokens.enum';
 import { CustomerDto } from 'src/dtos/customer/customer.dto';
 import { FindCustomersDto } from 'src/dtos/customer/findCustomers.dto';
 import { Customer } from 'src/entitites/customer/customer.entity';
+import { hashSync as bcryptHashSync } from 'bcrypt';
 
 @Injectable()
 export class CustomerService implements ICustomerService {
@@ -21,7 +22,18 @@ export class CustomerService implements ICustomerService {
             throw new HttpException('Customer alredy created', HttpStatus.BAD_REQUEST);
         }
 
-        await this.customerRepository.createCustomerAsync(customerDto);
+        const saltOrRounds = 12;
+
+        const customerEntity: Customer = {
+            name: customerDto.name,
+            email: customerDto.email,
+            date_of_birth: customerDto.date_of_birth,
+            phone: customerDto.phone,
+            password: bcryptHashSync(customerDto.password, saltOrRounds),
+
+        }
+
+        await this.customerRepository.createCustomerAsync(customerEntity);
     }
 
     async getCustomerByIdAsync(id: string): Promise<Customer | null> {
@@ -43,6 +55,6 @@ export class CustomerService implements ICustomerService {
     }
 
     async disableCustomerAsync(id: string): Promise<void> {
-        await this.disableCustomerAsync(id);
+        await this.customerRepository.disableCustomerAsync(id);
     }
 }

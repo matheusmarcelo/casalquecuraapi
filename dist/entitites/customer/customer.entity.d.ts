@@ -12,9 +12,9 @@ export declare class Customer {
     house_number?: string;
     description?: string;
     gender?: string;
-    role: string;
-    createdAt: Date;
-    updatedAt: Date;
-    isActive: boolean;
-    customer_id: CustomerActivity[];
+    role?: string;
+    createdAt?: Date;
+    updatedAt?: Date;
+    isActive?: boolean;
+    customer_id?: CustomerActivity[];
 }

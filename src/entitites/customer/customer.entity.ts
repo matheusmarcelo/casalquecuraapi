@@ -41,17 +41,17 @@ export class Customer {
     gender?: string;
 
     @Column({ length: 50, default: UserRoles.CUSTOMER })
-    role: string;
+    role?: string;
 
     @CreateDateColumn({ type: 'timestamp' })
-    createdAt: Date;
+    createdAt?: Date;
 
     @UpdateDateColumn({ type: 'timestamp' })
-    updatedAt: Date;
+    updatedAt?: Date;
 
     @Column({ default: true })
-    isActive: boolean;
+    isActive?: boolean;
 
     @OneToMany(type => CustomerActivity, (customer_activity) => customer_activity.cusomer_id)
-    customer_id: CustomerActivity[];
+    customer_id?: CustomerActivity[];
 }

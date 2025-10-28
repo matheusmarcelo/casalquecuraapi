@@ -12,7 +12,7 @@ const app_controller_1 = require("./app.controller");
 const app_service_1 = require("./app.service");
 const customer_module_1 = require("./modules/customer/customer.module");
 const config_1 = require("@nestjs/config");
-const db_module_1 = require("./infra/postgresql/db.module");
+const db_module_1 = require("./infra/db.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
