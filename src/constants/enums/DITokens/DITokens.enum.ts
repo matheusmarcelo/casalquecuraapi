@@ -5,4 +5,5 @@ export enum DITokensRepository {
 
 export enum DITokensService {
     CUSTOMER_SERVICE = 'ICustomerService',
+    ACTIVITY_SERVICE = 'IActivityService',
 }
