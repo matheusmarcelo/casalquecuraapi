@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { CustomerRepositoryPostgresql } from './postgresql/repositories/customer/customer-repository-postgresql.repository';
 import { Customer } from 'src/entitites/customer/customer.entity';
 import { DITokensRepository } from 'src/constants/enums/DITokens/DITokens.enum';
+import { ActivityRepositoryPostgresql } from './postgresql/repositories/activity/activity-repository-postgresql.repository';
 
 const repositoryProviders = [
     {
