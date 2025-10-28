@@ -5,7 +5,7 @@ import { DITokensService } from 'src/constants/enums/DITokens/DITokens.enum';
 
 @Module({
   controllers: [CustomerController],
-  providers: [CustomerService,
+  providers: [
     {
       provide: DITokensService.CUSTOMER_SERVICE,
       useClass: CustomerService
