@@ -10,6 +10,10 @@ const repositoryProviders = [
     {
         provide: DITokensRepository.CUSTOMER_REPOSITORY,
         useClass: CustomerRepositoryPostgresql
+    },
+    {
+        provide: DITokensRepository.ACTIVITY_REPOSITORY,
+        useClass: ActivityRepositoryPostgresql
     }
 ];
 
