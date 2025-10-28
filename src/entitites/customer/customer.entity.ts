@@ -1,11 +1,19 @@
 import { UserRoles } from "src/constants/enums/userRole.enum";
-import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { BeforeInsert, Column, CreateDateColumn, Entity, OneToMany, PrimaryColumn, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { CustomerActivity } from "../customer-activity/customer-activity.entity";
+import { v4 as uuidv4 } from 'uuid';
 
 @Entity({ name: 'users' })
 export class Customer {
-    @PrimaryGeneratedColumn("uuid")
+    @PrimaryColumn("uuid")
     id?: string;
+
+    @BeforeInsert()
+    generateId() {
+        if (!this.id) {
+            this.id = uuidv4();
+        }
+    }
 
     @Column({ type: "varchar", length: 255 })
     name: string;
