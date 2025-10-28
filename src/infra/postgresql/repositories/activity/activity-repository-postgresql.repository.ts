@@ -1,10 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { Global, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { IActivityRepository } from 'src/constants/contracts/activity/IActivityRepository.contract';
 import { FindActivitiesDto } from 'src/dtos/activity/findActivities.dto';
 import { Activity } from 'src/entitites/activity/activity.entity';
 import { FindOptionsWhere, ILike, MoreThanOrEqual, Repository } from 'typeorm';
 
+@Global()
 @Injectable()
 export class ActivityRepositoryPostgresql implements IActivityRepository {
 
