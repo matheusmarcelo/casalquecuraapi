@@ -51,8 +51,6 @@ export class CustomerRepositoryPostgresql implements ICustomerRepository {
             throw new HttpException('Customer not found', HttpStatus.NOT_FOUND);
         }
 
-        customer.isActive = false;
-
         await this.customerRepository.update(id, { isActive: false });
     }
 
