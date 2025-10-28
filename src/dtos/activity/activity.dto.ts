@@ -10,13 +10,14 @@ export class ActivityDto {
 
     @IsString()
     @IsNotEmpty({ message: 'Description must have a value' })
-    @MaxLength(3, { message: 'Min 3 character for title' })
+    @MaxLength(255, { message: 'Max 255 character for description' })
+    @MinLength(3, { message: 'Min 3 character for description' })
     description: string;
 
     @IsNumber({}, { message: 'Score must be a number type' })
     @Type(() => Number)
-    @MinLength(1, { message: 'Min 1 point for score' })
-    @MaxLength(100, { message: 'Max 100 point for score' })
+    @Min(1, { message: 'Min 1 point for score' })
+    @Max(100, { message: 'Max 100 point for score' })
     score: string;
 
     @IsBoolean({ message: 'isGeneral must be a boolean type' })
