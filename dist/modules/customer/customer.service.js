@@ -47,9 +47,17 @@ let CustomerService = class CustomerService {
         return await this.customerRepository.getCustomersAsync(params);
     }
     async updateCustomerAsync(id, customer) {
+        const customerFound = await this.customerRepository.getCustomerByIdAsync(id);
+        if (!customerFound) {
+            throw new common_1.HttpException('Customer not found', common_1.HttpStatus.NOT_FOUND);
+        }
         await this.customerRepository.updateCustomerAsync(id, customer);
     }
     async disableCustomerAsync(id) {
+        const customer = await this.customerRepository.getCustomerByIdAsync(id);
+        if (!customer) {
+            throw new common_1.HttpException('Customer not found', common_1.HttpStatus.NOT_FOUND);
+        }
         await this.customerRepository.disableCustomerAsync(id);
     }
 };

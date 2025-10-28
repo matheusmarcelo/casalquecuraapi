@@ -12,78 +12,75 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CustomerController = void 0;
+exports.ActivityController = void 0;
 const common_1 = require("@nestjs/common");
 const DITokens_enum_1 = require("../../constants/enums/DITokens/DITokens.enum");
-const customer_dto_1 = require("../../dtos/customer/customer.dto");
-const findCustomers_dto_1 = require("../../dtos/customer/findCustomers.dto");
-const customer_entity_1 = require("../../entitites/customer/customer.entity");
-let CustomerController = class CustomerController {
-    customerService;
-    constructor(customerService) {
-        this.customerService = customerService;
+const activity_dto_1 = require("../../dtos/activity/activity.dto");
+const findActivities_dto_1 = require("../../dtos/activity/findActivities.dto");
+const activity_entity_1 = require("../../entitites/activity/activity.entity");
+let ActivityController = class ActivityController {
+    activityService;
+    constructor(activityService) {
+        this.activityService = activityService;
     }
-    async createCustomerAsync(customer) {
-        await this.customerService.createCustomerAsync(customer);
+    async createActivityAsync(activityDto) {
+        await this.activityService.createActivityAsync(activityDto);
     }
-    async updateCustomerAsync(id, customer) {
-        await this.customerService.updateCustomerAsync(id, customer);
+    async updateActivityAsync(id, activity) {
+        await this.activityService.updateActivityAsync(id, activity);
     }
-    async getCustomerAsync(id) {
-        const customer = await this.customerService.getCustomerByIdAsync(id);
-        return customer;
+    async getActivityAsync(id) {
+        const activity = await this.activityService.getActivityAsync(id);
+        return activity;
     }
-    async getCustomersAsync(params) {
-        const customers = await this.customerService.getCustomersAsync(params);
-        return customers;
+    async getActivitiesAsync(params) {
+        const activities = await this.activityService.getActivitiesAsync(params);
+        return activities;
     }
-    async disableCustomerAsync(id) {
-        await this.customerService.disableCustomerAsync(id);
+    async deleteActivitiesAsync(id) {
+        await this.activityService.deleteActivityAsync(id);
     }
 };
-exports.CustomerController = CustomerController;
+exports.ActivityController = ActivityController;
 __decorate([
     (0, common_1.Post)(''),
-    (0, common_1.HttpCode)(common_1.HttpStatus.CREATED),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [customer_dto_1.CustomerDto]),
+    __metadata("design:paramtypes", [activity_dto_1.ActivityDto]),
     __metadata("design:returntype", Promise)
-], CustomerController.prototype, "createCustomerAsync", null);
+], ActivityController.prototype, "createActivityAsync", null);
 __decorate([
     (0, common_1.Put)('/:id'),
     (0, common_1.HttpCode)(common_1.HttpStatus.OK),
     __param(0, (0, common_1.Param)('id')),
-    __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, customer_entity_1.Customer]),
+    __metadata("design:paramtypes", [String, activity_entity_1.Activity]),
     __metadata("design:returntype", Promise)
-], CustomerController.prototype, "updateCustomerAsync", null);
+], ActivityController.prototype, "updateActivityAsync", null);
 __decorate([
     (0, common_1.Get)('/:id'),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
-], CustomerController.prototype, "getCustomerAsync", null);
+], ActivityController.prototype, "getActivityAsync", null);
 __decorate([
     (0, common_1.Get)(''),
     __param(0, (0, common_1.Query)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [findCustomers_dto_1.FindCustomersDto]),
+    __metadata("design:paramtypes", [findActivities_dto_1.FindActivitiesDto]),
     __metadata("design:returntype", Promise)
-], CustomerController.prototype, "getCustomersAsync", null);
+], ActivityController.prototype, "getActivitiesAsync", null);
 __decorate([
-    (0, common_1.Post)('/:id/disable'),
-    (0, common_1.HttpCode)(common_1.HttpStatus.OK),
+    (0, common_1.Delete)('/:id'),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
-], CustomerController.prototype, "disableCustomerAsync", null);
-exports.CustomerController = CustomerController = __decorate([
-    (0, common_1.Controller)('customers'),
-    __param(0, (0, common_1.Inject)(DITokens_enum_1.DITokensService.CUSTOMER_SERVICE)),
+], ActivityController.prototype, "deleteActivitiesAsync", null);
+exports.ActivityController = ActivityController = __decorate([
+    (0, common_1.Controller)('activities'),
+    __param(0, (0, common_1.Inject)(DITokens_enum_1.DITokensService.ACTIVITY_SERVICE)),
     __metadata("design:paramtypes", [Object])
-], CustomerController);
-//# sourceMappingURL=customer.controller.js.map
+], ActivityController);
+//# sourceMappingURL=activity.controller.js.map

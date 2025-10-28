@@ -13,10 +13,16 @@ const typeorm_1 = require("@nestjs/typeorm");
 const customer_repository_postgresql_repository_1 = require("./postgresql/repositories/customer/customer-repository-postgresql.repository");
 const customer_entity_1 = require("../entitites/customer/customer.entity");
 const DITokens_enum_1 = require("../constants/enums/DITokens/DITokens.enum");
+const activity_repository_postgresql_repository_1 = require("./postgresql/repositories/activity/activity-repository-postgresql.repository");
+const activity_entity_1 = require("../entitites/activity/activity.entity");
 const repositoryProviders = [
     {
         provide: DITokens_enum_1.DITokensRepository.CUSTOMER_REPOSITORY,
         useClass: customer_repository_postgresql_repository_1.CustomerRepositoryPostgresql
+    },
+    {
+        provide: DITokens_enum_1.DITokensRepository.ACTIVITY_REPOSITORY,
+        useClass: activity_repository_postgresql_repository_1.ActivityRepositoryPostgresql
     }
 ];
 let DBModule = class DBModule {
@@ -40,7 +46,7 @@ exports.DBModule = DBModule = __decorate([
                 }),
                 inject: [config_1.ConfigService],
             }),
-            typeorm_1.TypeOrmModule.forFeature([customer_entity_1.Customer]),
+            typeorm_1.TypeOrmModule.forFeature([customer_entity_1.Customer, activity_entity_1.Activity]),
         ],
         providers: [...repositoryProviders],
         exports: [...repositoryProviders],

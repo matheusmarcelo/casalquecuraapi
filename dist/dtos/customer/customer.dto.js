@@ -20,27 +20,35 @@ class CustomerDto {
 }
 exports.CustomerDto = CustomerDto;
 __decorate([
-    (0, class_validator_1.IsString)(),
-    (0, class_validator_1.MaxLength)(255),
+    (0, class_validator_1.IsString)({ message: 'Name must be a string type' }),
+    (0, class_validator_1.MaxLength)(255, { message: 'Max 255 character for name' }),
+    (0, class_validator_1.MinLength)(1, { message: 'Min 1 character for name' }),
+    (0, class_validator_1.IsNotEmpty)({ message: 'Name must have a value' }),
     __metadata("design:type", String)
 ], CustomerDto.prototype, "name", void 0);
 __decorate([
-    (0, class_validator_1.IsString)(),
-    (0, class_validator_1.MaxLength)(50),
+    (0, class_validator_1.IsString)({ message: 'Email must be a string type' }),
+    (0, class_validator_1.MaxLength)(50, { message: 'Max 50 character for email' }),
+    (0, class_validator_1.MinLength)(1, { message: 'Min 1 character for email' }),
+    (0, class_validator_1.IsNotEmpty)({ message: 'Email must have a value' }),
     __metadata("design:type", String)
 ], CustomerDto.prototype, "email", void 0);
 __decorate([
-    (0, class_validator_1.IsString)(),
-    (0, class_validator_1.MaxLength)(255),
+    (0, class_validator_1.IsString)({ message: 'Password must be a string type' }),
+    (0, class_validator_1.MaxLength)(255, { message: 'Max 255 character for password' }),
+    (0, class_validator_1.MinLength)(1, { message: 'Min 1 character for password' }),
+    (0, class_validator_1.IsNotEmpty)({ message: 'Password must have a value' }),
     __metadata("design:type", String)
 ], CustomerDto.prototype, "password", void 0);
 __decorate([
     (0, class_validator_1.IsDateString)(),
+    (0, class_validator_1.IsNotEmpty)({ message: 'Date of birth must have a value' }),
     __metadata("design:type", Date)
 ], CustomerDto.prototype, "date_of_birth", void 0);
 __decorate([
-    (0, class_validator_1.IsString)(),
-    (0, class_validator_1.MaxLength)(25),
+    (0, class_validator_1.IsString)({ message: 'Phone must be a string type' }),
+    (0, class_validator_1.MaxLength)(25, { message: 'Max 25 character for phone' }),
+    (0, class_validator_1.IsNotEmpty)({ message: 'Phone must have a value' }),
     __metadata("design:type", String)
 ], CustomerDto.prototype, "phone", void 0);
 //# sourceMappingURL=customer.dto.js.map

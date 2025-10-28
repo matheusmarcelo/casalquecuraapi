@@ -4,8 +4,8 @@ export declare class Activity {
     title: string;
     description: string;
     score: string;
-    isGeneral: string;
-    createdAt: Date;
-    updatedAt: Date;
-    activity_id: CustomerActivity[];
+    isGeneral?: string;
+    createdAt?: Date;
+    updatedAt?: Date;
+    activity_id?: CustomerActivity[];
 }

@@ -6,23 +6,23 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CustomerModule = void 0;
+exports.ActivityModule = void 0;
 const common_1 = require("@nestjs/common");
-const customer_controller_1 = require("./customer.controller");
-const customer_service_1 = require("./customer.service");
+const activity_service_1 = require("./activity.service");
+const activity_controller_1 = require("./activity.controller");
 const DITokens_enum_1 = require("../../constants/enums/DITokens/DITokens.enum");
-let CustomerModule = class CustomerModule {
+let ActivityModule = class ActivityModule {
 };
-exports.CustomerModule = CustomerModule;
-exports.CustomerModule = CustomerModule = __decorate([
+exports.ActivityModule = ActivityModule;
+exports.ActivityModule = ActivityModule = __decorate([
     (0, common_1.Module)({
-        controllers: [customer_controller_1.CustomerController],
+        controllers: [activity_controller_1.ActivityController],
         providers: [
             {
-                provide: DITokens_enum_1.DITokensService.CUSTOMER_SERVICE,
-                useClass: customer_service_1.CustomerService
+                provide: DITokens_enum_1.DITokensService.ACTIVITY_SERVICE,
+                useClass: activity_service_1.ActivityService
             }
         ],
     })
-], CustomerModule);
-//# sourceMappingURL=customer.module.js.map
+], ActivityModule);
+//# sourceMappingURL=activity.module.js.map
