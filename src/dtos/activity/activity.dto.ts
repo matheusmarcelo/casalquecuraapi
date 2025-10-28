@@ -18,7 +18,7 @@ export class ActivityDto {
     @Type(() => Number)
     @Min(1, { message: 'Min 1 point for score' })
     @Max(100, { message: 'Max 100 point for score' })
-    score: string;
+    score: number;
 
     @IsBoolean({ message: 'isGeneral must be a boolean type' })
     @IsOptional()

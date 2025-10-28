@@ -13,7 +13,7 @@ export class Activity {
     description: string;
 
     @Column({ type: 'decimal' })
-    score: string;
+    score: number;
 
     @Column({ type: 'bit', default: true })
     isGeneral?: string;
