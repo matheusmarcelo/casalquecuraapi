@@ -16,14 +16,14 @@ export class Activity {
     score: string;
 
     @Column({ type: 'bit', default: true })
-    isGeneral: string;
+    isGeneral?: string;
 
     @CreateDateColumn({ type: 'timestamp' })
-    createdAt: Date;
+    createdAt?: Date;
 
     @UpdateDateColumn({ type: 'timestamp' })
-    updatedAt: Date;
+    updatedAt?: Date;
 
     @OneToMany(type => CustomerActivity, (customer_activity) => customer_activity.activity_id)
-    activity_id: CustomerActivity[];
+    activity_id?: CustomerActivity[];
 }
