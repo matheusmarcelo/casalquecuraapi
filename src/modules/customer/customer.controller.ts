@@ -5,7 +5,7 @@ import { CustomerDto } from 'src/dtos/customer/customer.dto';
 import { FindCustomersDto } from 'src/dtos/customer/findCustomers.dto';
 import { Customer } from 'src/entitites/customer/customer.entity';
 
-@Controller('customer')
+@Controller('customers')
 export class CustomerController {
 
     constructor(
