@@ -2,6 +2,8 @@ import { UserRoles } from "src/constants/enums/userRole.enum";
 import { BeforeInsert, Column, CreateDateColumn, Entity, OneToMany, PrimaryColumn, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { CustomerActivity } from "../customer-activity/customer-activity.entity";
 import { v4 as uuidv4 } from 'uuid';
+import { AuxLinkedUsers } from "../linked-users/aux_linked_users.entity";
+import { LinkedUsers } from "../linked-users/linked_users.entity";
 
 @Entity({ name: 'users' })
 export class Customer {
@@ -62,4 +64,16 @@ export class Customer {
 
     @OneToMany(type => CustomerActivity, (customer_activity) => customer_activity.customer)
     customers?: CustomerActivity[];
+
+    @OneToMany(type => LinkedUsers, (linkedUsers) => linkedUsers.user1)
+    user1?: LinkedUsers[];
+
+    @OneToMany(type => LinkedUsers, (linkedUsers) => linkedUsers.user2)
+    user2?: LinkedUsers[];
+
+    @OneToMany(type => AuxLinkedUsers, (auxLinkedUsers) => auxLinkedUsers.from)
+    fromAuxLinkedUsers?: AuxLinkedUsers[];
+
+    @OneToMany(type => AuxLinkedUsers, (auxLinkedUsers) => auxLinkedUsers.to)
+    toAuxLinkedUsers?: AuxLinkedUsers[];
 }
