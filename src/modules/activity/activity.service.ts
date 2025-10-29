@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import type { IActivityRepository } from 'src/constants/contracts/activity/IActivityRepository.contract';
 import { IActivityService } from 'src/constants/contracts/activity/IActivityService.contract';
-import type { ICustomerActivityRepository } from 'src/constants/contracts/customer_activity/ICustomerActivitiesRepository.contract';
+import type { ICustomerActivityRepository } from 'src/constants/contracts/customer-activity/ICustomerActivitiesRepository.contract';
 import { DITokensRepository } from 'src/constants/enums/DITokens/DITokens.enum';
 import { ActivityDto } from 'src/dtos/activity/activity.dto';
 import { FindActivitiesDto } from 'src/dtos/activity/findActivities.dto';

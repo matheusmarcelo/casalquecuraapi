@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Inject, Param, Post } from '@nestjs/common';
-import type { ICustomerActivityService } from 'src/constants/contracts/customer_activity/ICustomerActivitiesService.contract';
+import type { ICustomerActivityService } from 'src/constants/contracts/customer-activity/ICustomerActivitiesService.contract';
 import { DITokensService } from 'src/constants/enums/DITokens/DITokens.enum';
 import { CustomerActivityDto } from 'src/dtos/customer_activity/customerActivity.dto';
 import { CustomerActivity } from 'src/entitites/customer-activity/customer-activity.entity';

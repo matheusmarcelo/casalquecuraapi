@@ -1,6 +1,6 @@
 import { Global, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ICustomerActivityRepository } from 'src/constants/contracts/customer_activity/ICustomerActivitiesRepository.contract';
+import { ICustomerActivityRepository } from 'src/constants/contracts/customer-activity/ICustomerActivitiesRepository.contract';
 import { CustomerActivity } from 'src/entitites/customer-activity/customer-activity.entity';
 import { In, Repository } from 'typeorm';
 
