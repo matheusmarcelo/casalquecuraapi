@@ -36,7 +36,7 @@ let Customer = class Customer {
     createdAt;
     updatedAt;
     isActive;
-    customer_id;
+    customers;
 };
 exports.Customer = Customer;
 __decorate([
@@ -110,9 +110,9 @@ __decorate([
     __metadata("design:type", Boolean)
 ], Customer.prototype, "isActive", void 0);
 __decorate([
-    (0, typeorm_1.OneToMany)(type => customer_activity_entity_1.CustomerActivity, (customer_activity) => customer_activity.cusomer_id),
+    (0, typeorm_1.OneToMany)(type => customer_activity_entity_1.CustomerActivity, (customer_activity) => customer_activity.customer),
     __metadata("design:type", Array)
-], Customer.prototype, "customer_id", void 0);
+], Customer.prototype, "customers", void 0);
 exports.Customer = Customer = __decorate([
     (0, typeorm_1.Entity)({ name: 'users' })
 ], Customer);

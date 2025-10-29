@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Customer } from "../customer/customer.entity";
 import { Activity } from "../activity/activity.entity";
 
@@ -8,10 +8,10 @@ export class CustomerActivity {
     id?: string;
 
     @ManyToOne(type => Customer, (customer) => customer.id)
-    @Column({ name: 'user_id' })
-    cusomer_id: string;
+    @JoinColumn({ name: 'user_id' })
+    customer: Customer;
 
     @ManyToOne(type => Activity, (activity) => activity.id)
-    @Column({ name: 'activity_id' })
-    activity_id: string;
+    @JoinColumn({ name: 'activity_id' })
+    activity: Activity;
 }

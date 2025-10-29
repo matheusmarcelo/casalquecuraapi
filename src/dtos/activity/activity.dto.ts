@@ -1,5 +1,5 @@
 import { Type } from "class-transformer";
-import { IsBoolean, IsDecimal, IsNotEmpty, IsNumber, IsOptional, IsString, Max, MaxLength, Min, MinLength } from "class-validator";
+import { IsArray, IsBoolean, IsNotEmpty, IsNumber, IsOptional, IsString, Max, MaxLength, Min, MinLength, ValidateIf } from "class-validator";
 
 export class ActivityDto {
     @IsString({ message: 'Title must be a string type' })
@@ -23,4 +23,9 @@ export class ActivityDto {
     @IsBoolean({ message: 'isGeneral must be a boolean type' })
     @IsOptional()
     isGeneral: string;
+
+    @ValidateIf(o => o.isGeneral === false)
+    @IsNotEmpty({ message: 'CustomerIds must be a value' })
+    @IsArray({ message: 'CustomerIds must be a array type' })
+    customerIds: string[];
 }

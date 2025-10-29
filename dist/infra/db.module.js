@@ -10,20 +10,26 @@ exports.DBModule = void 0;
 const common_1 = require("@nestjs/common");
 const config_1 = require("@nestjs/config");
 const typeorm_1 = require("@nestjs/typeorm");
-const customer_repository_postgresql_repository_1 = require("./postgresql/repositories/customer/customer-repository-postgresql.repository");
+const customer_repository_postgresql_1 = require("./postgresql/repositories/customer/customer-repository.postgresql");
 const customer_entity_1 = require("../entitites/customer/customer.entity");
 const DITokens_enum_1 = require("../constants/enums/DITokens/DITokens.enum");
-const activity_repository_postgresql_repository_1 = require("./postgresql/repositories/activity/activity-repository-postgresql.repository");
+const activity_repository_postgresql_1 = require("./postgresql/repositories/activity/activity-repository.postgresql");
 const activity_entity_1 = require("../entitites/activity/activity.entity");
+const customer_activity_repository_postgresql_1 = require("./postgresql/repositories/customer_activity/customer-activity-repository.postgresql");
+const customer_activity_entity_1 = require("../entitites/customer-activity/customer-activity.entity");
 const repositoryProviders = [
     {
         provide: DITokens_enum_1.DITokensRepository.CUSTOMER_REPOSITORY,
-        useClass: customer_repository_postgresql_repository_1.CustomerRepositoryPostgresql
+        useClass: customer_repository_postgresql_1.CustomerRepositoryPostgresql
     },
     {
         provide: DITokens_enum_1.DITokensRepository.ACTIVITY_REPOSITORY,
-        useClass: activity_repository_postgresql_repository_1.ActivityRepositoryPostgresql
-    }
+        useClass: activity_repository_postgresql_1.ActivityRepositoryPostgresql
+    },
+    {
+        provide: DITokens_enum_1.DITokensRepository.CUSTOMER_ACTIVITY_REPOSITORY,
+        useClass: customer_activity_repository_postgresql_1.CustomerActivityRepositoryPostgresql
+    },
 ];
 let DBModule = class DBModule {
 };
@@ -46,7 +52,7 @@ exports.DBModule = DBModule = __decorate([
                 }),
                 inject: [config_1.ConfigService],
             }),
-            typeorm_1.TypeOrmModule.forFeature([customer_entity_1.Customer, activity_entity_1.Activity]),
+            typeorm_1.TypeOrmModule.forFeature([customer_entity_1.Customer, activity_entity_1.Activity, customer_activity_entity_1.CustomerActivity]),
         ],
         providers: [...repositoryProviders],
         exports: [...repositoryProviders],

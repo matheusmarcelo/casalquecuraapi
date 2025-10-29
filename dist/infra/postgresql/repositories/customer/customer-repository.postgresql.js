@@ -49,7 +49,6 @@ let CustomerRepositoryPostgresql = class CustomerRepositoryPostgresql {
         if (!customer) {
             throw new common_1.HttpException('Customer not found', common_1.HttpStatus.NOT_FOUND);
         }
-        customer.isActive = false;
         await this.customerRepository.update(id, { isActive: false });
     }
     async getCustomerByEmail(email) {
@@ -63,4 +62,4 @@ exports.CustomerRepositoryPostgresql = CustomerRepositoryPostgresql = __decorate
     __param(0, (0, typeorm_1.InjectRepository)(customer_entity_1.Customer)),
     __metadata("design:paramtypes", [typeorm_2.Repository])
 ], CustomerRepositoryPostgresql);
-//# sourceMappingURL=customer-repository-postgresql.repository.js.map
+//# sourceMappingURL=customer-repository.postgresql.js.map

@@ -23,7 +23,8 @@ let ActivityRepositoryPostgresql = class ActivityRepositoryPostgresql {
         this.activityRepository = activityRepository;
     }
     async createActivityAsync(activity) {
-        await this.activityRepository.save(activity);
+        const activityCreated = await this.activityRepository.save(activity);
+        return activityCreated;
     }
     async getActivityAsync(id) {
         const activity = await this.activityRepository.findOne({ where: { id } });
@@ -58,4 +59,4 @@ exports.ActivityRepositoryPostgresql = ActivityRepositoryPostgresql = __decorate
     __param(0, (0, typeorm_1.InjectRepository)(activity_entity_1.Activity)),
     __metadata("design:paramtypes", [typeorm_2.Repository])
 ], ActivityRepositoryPostgresql);
-//# sourceMappingURL=activity-repository-postgresql.repository.js.map
+//# sourceMappingURL=activity-repository.postgresql.js.map

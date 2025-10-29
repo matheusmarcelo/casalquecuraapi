@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { ActivityRepositoryPostgresql } from './activity-repository-postgresql.repository';
+import { ActivityRepositoryPostgresql } from './activity-repository.postgresql';
 
 describe('ActivityService', () => {
   let service: ActivityRepositoryPostgresql;

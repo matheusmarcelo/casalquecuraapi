@@ -6,7 +6,7 @@ export declare class ActivityController {
     private readonly activityService;
     constructor(activityService: IActivityService);
     createActivityAsync(activityDto: ActivityDto): Promise<void>;
-    updateActivityAsync(id: string, activity: Activity): Promise<void>;
+    updateActivityAsync(id: string, activity: ActivityDto): Promise<void>;
     getActivityAsync(id: string): Promise<Activity | null>;
     getActivitiesAsync(params: FindActivitiesDto): Promise<Activity[]>;
     deleteActivitiesAsync(id: string): Promise<void>;

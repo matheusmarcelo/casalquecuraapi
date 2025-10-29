@@ -7,10 +7,7 @@ const global_exception_filter_1 = require("./common/filters/global-exception/glo
 async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
     app.useGlobalFilters(new global_exception_filter_1.GlobalExceptionFilter());
-    app.useGlobalPipes(new common_1.ValidationPipe({
-        whitelist: true,
-        transform: true,
-    }));
+    app.useGlobalPipes(new common_1.ValidationPipe());
     await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();

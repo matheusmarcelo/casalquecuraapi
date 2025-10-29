@@ -3,9 +3,9 @@ export declare class Activity {
     id?: string;
     title: string;
     description: string;
-    score: string;
+    score: number;
     isGeneral?: string;
     createdAt?: Date;
     updatedAt?: Date;
-    activity_id?: CustomerActivity[];
+    activities?: CustomerActivity[];
 }

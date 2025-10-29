@@ -17,5 +17,5 @@ export declare class Customer {
     createdAt?: Date;
     updatedAt?: Date;
     isActive?: boolean;
-    customer_id?: CustomerActivity[];
+    customers?: CustomerActivity[];
 }

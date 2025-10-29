@@ -1,8 +1,10 @@
 export declare enum DITokensRepository {
     CUSTOMER_REPOSITORY = "ICustomerRepository",
-    ACTIVITY_REPOSITORY = "IActivityRepository"
+    ACTIVITY_REPOSITORY = "IActivityRepository",
+    CUSTOMER_ACTIVITY_REPOSITORY = "ICustomerActivityRepository"
 }
 export declare enum DITokensService {
     CUSTOMER_SERVICE = "ICustomerService",
-    ACTIVITY_SERVICE = "IActivityService"
+    ACTIVITY_SERVICE = "IActivityService",
+    CUSTOMER_ACTIVITY_SERVICE = "ICustomerActivityService"
 }

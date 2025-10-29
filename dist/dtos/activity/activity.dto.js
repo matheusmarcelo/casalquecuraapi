@@ -17,6 +17,7 @@ class ActivityDto {
     description;
     score;
     isGeneral;
+    customerIds;
 }
 exports.ActivityDto = ActivityDto;
 __decorate([
@@ -38,11 +39,17 @@ __decorate([
     (0, class_transformer_1.Type)(() => Number),
     (0, class_validator_1.Min)(1, { message: 'Min 1 point for score' }),
     (0, class_validator_1.Max)(100, { message: 'Max 100 point for score' }),
-    __metadata("design:type", String)
+    __metadata("design:type", Number)
 ], ActivityDto.prototype, "score", void 0);
 __decorate([
     (0, class_validator_1.IsBoolean)({ message: 'isGeneral must be a boolean type' }),
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)
 ], ActivityDto.prototype, "isGeneral", void 0);
+__decorate([
+    (0, class_validator_1.ValidateIf)(o => o.isGeneral === false),
+    (0, class_validator_1.IsNotEmpty)({ message: 'CustomerIds must be a value' }),
+    (0, class_validator_1.IsArray)({ message: 'CustomerIds must be a array type' }),
+    __metadata("design:type", Array)
+], ActivityDto.prototype, "customerIds", void 0);
 //# sourceMappingURL=activity.dto.js.map

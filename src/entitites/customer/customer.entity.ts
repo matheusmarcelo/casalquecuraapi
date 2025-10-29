@@ -60,6 +60,6 @@ export class Customer {
     @Column({ default: true })
     isActive?: boolean;
 
-    @OneToMany(type => CustomerActivity, (customer_activity) => customer_activity.cusomer_id)
-    customer_id?: CustomerActivity[];
+    @OneToMany(type => CustomerActivity, (customer_activity) => customer_activity.customer)
+    customers?: CustomerActivity[];
 }

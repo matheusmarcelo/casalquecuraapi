@@ -24,6 +24,6 @@ export class Activity {
     @UpdateDateColumn({ type: 'timestamp' })
     updatedAt?: Date;
 
-    @OneToMany(type => CustomerActivity, (customer_activity) => customer_activity.activity_id)
-    activity_id?: CustomerActivity[];
+    @OneToMany(type => CustomerActivity, (customer_activity) => customer_activity.activity)
+    activities?: CustomerActivity[];
 }

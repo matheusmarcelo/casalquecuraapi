@@ -14,8 +14,9 @@ export class ActivityRepositoryPostgresql implements IActivityRepository {
         private readonly activityRepository: Repository<Activity>,
     ) { }
 
-    async createActivityAsync(activity: Activity): Promise<void> {
-        await this.activityRepository.save(activity);
+    async createActivityAsync(activity: Activity): Promise<Activity> {
+        const activityCreated = await this.activityRepository.save(activity);
+        return activityCreated;
     }
 
     async getActivityAsync(id: string): Promise<Activity | null> {

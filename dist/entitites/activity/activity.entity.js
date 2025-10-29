@@ -20,7 +20,7 @@ let Activity = class Activity {
     isGeneral;
     createdAt;
     updatedAt;
-    activity_id;
+    activities;
 };
 exports.Activity = Activity;
 __decorate([
@@ -37,7 +37,7 @@ __decorate([
 ], Activity.prototype, "description", void 0);
 __decorate([
     (0, typeorm_1.Column)({ type: 'decimal' }),
-    __metadata("design:type", String)
+    __metadata("design:type", Number)
 ], Activity.prototype, "score", void 0);
 __decorate([
     (0, typeorm_1.Column)({ type: 'bit', default: true }),
@@ -52,9 +52,9 @@ __decorate([
     __metadata("design:type", Date)
 ], Activity.prototype, "updatedAt", void 0);
 __decorate([
-    (0, typeorm_1.OneToMany)(type => customer_activity_entity_1.CustomerActivity, (customer_activity) => customer_activity.activity_id),
+    (0, typeorm_1.OneToMany)(type => customer_activity_entity_1.CustomerActivity, (customer_activity) => customer_activity.activity),
     __metadata("design:type", Array)
-], Activity.prototype, "activity_id", void 0);
+], Activity.prototype, "activities", void 0);
 exports.Activity = Activity = __decorate([
     (0, typeorm_1.Entity)({ name: 'activities' })
 ], Activity);

@@ -17,7 +17,6 @@ const common_1 = require("@nestjs/common");
 const DITokens_enum_1 = require("../../constants/enums/DITokens/DITokens.enum");
 const activity_dto_1 = require("../../dtos/activity/activity.dto");
 const findActivities_dto_1 = require("../../dtos/activity/findActivities.dto");
-const activity_entity_1 = require("../../entitites/activity/activity.entity");
 let ActivityController = class ActivityController {
     activityService;
     constructor(activityService) {
@@ -53,8 +52,9 @@ __decorate([
     (0, common_1.Put)('/:id'),
     (0, common_1.HttpCode)(common_1.HttpStatus.OK),
     __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, activity_entity_1.Activity]),
+    __metadata("design:paramtypes", [String, activity_dto_1.ActivityDto]),
     __metadata("design:returntype", Promise)
 ], ActivityController.prototype, "updateActivityAsync", null);
 __decorate([

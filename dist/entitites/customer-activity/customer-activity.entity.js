@@ -15,8 +15,8 @@ const customer_entity_1 = require("../customer/customer.entity");
 const activity_entity_1 = require("../activity/activity.entity");
 let CustomerActivity = class CustomerActivity {
     id;
-    cusomer_id;
-    activity_id;
+    customer;
+    activity;
 };
 exports.CustomerActivity = CustomerActivity;
 __decorate([
@@ -25,14 +25,14 @@ __decorate([
 ], CustomerActivity.prototype, "id", void 0);
 __decorate([
     (0, typeorm_1.ManyToOne)(type => customer_entity_1.Customer, (customer) => customer.id),
-    (0, typeorm_1.Column)({ name: 'user_id' }),
-    __metadata("design:type", String)
-], CustomerActivity.prototype, "cusomer_id", void 0);
+    (0, typeorm_1.JoinColumn)({ name: 'user_id' }),
+    __metadata("design:type", customer_entity_1.Customer)
+], CustomerActivity.prototype, "customer", void 0);
 __decorate([
     (0, typeorm_1.ManyToOne)(type => activity_entity_1.Activity, (activity) => activity.id),
-    (0, typeorm_1.Column)({ name: 'activity_id' }),
-    __metadata("design:type", String)
-], CustomerActivity.prototype, "activity_id", void 0);
+    (0, typeorm_1.JoinColumn)({ name: 'activity_id' }),
+    __metadata("design:type", activity_entity_1.Activity)
+], CustomerActivity.prototype, "activity", void 0);
 exports.CustomerActivity = CustomerActivity = __decorate([
     (0, typeorm_1.Entity)({ name: 'user_activities' })
 ], CustomerActivity);

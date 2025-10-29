@@ -5,7 +5,7 @@ import { Repository } from 'typeorm';
 export declare class ActivityRepositoryPostgresql implements IActivityRepository {
     private readonly activityRepository;
     constructor(activityRepository: Repository<Activity>);
-    createActivityAsync(activity: Activity): Promise<void>;
+    createActivityAsync(activity: Activity): Promise<Activity>;
     getActivityAsync(id: string): Promise<Activity | null>;
     getActivitiesAsync(params: FindActivitiesDto): Promise<Activity[]>;
     updateActivityAsync(id: string, activity: Activity): Promise<void>;

@@ -1,6 +1,7 @@
 export declare class ActivityDto {
     title: string;
     description: string;
-    score: string;
+    score: number;
     isGeneral: string;
+    customerIds: string[];
 }

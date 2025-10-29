@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { CustomerRepositoryPostgresql } from './customer-repository-postgresql.repository';
+import { CustomerRepositoryPostgresql } from './customer-repository.postgresql';
 
 describe('CustomerRepositoryPostgresql', () => {
   let service: CustomerRepositoryPostgresql;

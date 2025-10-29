@@ -1,11 +1,13 @@
 import { Global, Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { CustomerRepositoryPostgresql } from './postgresql/repositories/customer/customer-repository-postgresql.repository';
+import { CustomerRepositoryPostgresql } from './postgresql/repositories/customer/customer-repository.postgresql';
 import { Customer } from 'src/entitites/customer/customer.entity';
 import { DITokensRepository } from 'src/constants/enums/DITokens/DITokens.enum';
-import { ActivityRepositoryPostgresql } from './postgresql/repositories/activity/activity-repository-postgresql.repository';
+import { ActivityRepositoryPostgresql } from './postgresql/repositories/activity/activity-repository.postgresql';
 import { Activity } from 'src/entitites/activity/activity.entity';
+import { CustomerActivityRepositoryPostgresql } from './postgresql/repositories/customer_activity/customer-activity-repository.postgresql';
+import { CustomerActivity } from 'src/entitites/customer-activity/customer-activity.entity';
 
 const repositoryProviders = [
     {
@@ -15,7 +17,11 @@ const repositoryProviders = [
     {
         provide: DITokensRepository.ACTIVITY_REPOSITORY,
         useClass: ActivityRepositoryPostgresql
-    }
+    },
+    {
+        provide: DITokensRepository.CUSTOMER_ACTIVITY_REPOSITORY,
+        useClass: CustomerActivityRepositoryPostgresql
+    },
 ];
 
 @Global()
@@ -35,7 +41,7 @@ const repositoryProviders = [
             }),
             inject: [ConfigService],
         }),
-        TypeOrmModule.forFeature([Customer, Activity]),
+        TypeOrmModule.forFeature([Customer, Activity, CustomerActivity]),
     ],
     providers: [...repositoryProviders],
     exports: [...repositoryProviders],

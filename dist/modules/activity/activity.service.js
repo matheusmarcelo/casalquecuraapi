@@ -17,8 +17,10 @@ const common_1 = require("@nestjs/common");
 const DITokens_enum_1 = require("../../constants/enums/DITokens/DITokens.enum");
 let ActivityService = class ActivityService {
     activityRepository;
-    constructor(activityRepository) {
+    customerActivityRepository;
+    constructor(activityRepository, customerActivityRepository) {
         this.activityRepository = activityRepository;
+        this.customerActivityRepository = customerActivityRepository;
     }
     async createActivityAsync(activityDto) {
         const activity = {
@@ -27,7 +29,13 @@ let ActivityService = class ActivityService {
             score: activityDto.score,
             isGeneral: activityDto.isGeneral,
         };
-        await this.activityRepository.createActivityAsync(activity);
+        const activityCreated = await this.activityRepository.createActivityAsync(activity);
+        if (!activityDto.isGeneral) {
+            if (activityDto.customerIds.length <= 0) {
+                throw new common_1.HttpException('Empty customer id list', common_1.HttpStatus.BAD_REQUEST);
+            }
+            await this.customerActivityRepository.assignCustomersToActivityAsync(activityCreated.id, activityDto.customerIds);
+        }
     }
     async getActivityAsync(id) {
         const activity = await this.activityRepository.getActivityAsync(id);
@@ -44,7 +52,26 @@ let ActivityService = class ActivityService {
         if (!activityFound) {
             throw new common_1.HttpException('Activity not found', common_1.HttpStatus.NOT_FOUND);
         }
-        await this.activityRepository.updateActivityAsync(id, activity);
+        const activityToUpdate = {
+            title: activity.title,
+            description: activity.description,
+            score: activity.score,
+            isGeneral: activity.isGeneral,
+        };
+        await this.activityRepository.updateActivityAsync(id, activityToUpdate);
+        if (!activity.isGeneral) {
+            if (activity.customerIds.length <= 0) {
+                throw new common_1.HttpException('Empty customer id list', common_1.HttpStatus.BAD_REQUEST);
+            }
+            await this.customerActivityRepository.assignCustomersToActivityAsync(id, activity.customerIds);
+        }
+        else {
+            const customerActivities = await this.customerActivityRepository.getCustomerActivitiesByActivityIdAsync(id);
+            if (customerActivities.length > 0) {
+                const ids = customerActivities.map(activities => activities.id);
+                await this.customerActivityRepository.deleteMultipleActivitiesAsync(ids);
+            }
+        }
     }
     async deleteActivityAsync(id) {
         const activityFound = await this.activityRepository.getActivityAsync(id);
@@ -58,6 +85,7 @@ exports.ActivityService = ActivityService;
 exports.ActivityService = ActivityService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, common_1.Inject)(DITokens_enum_1.DITokensRepository.ACTIVITY_REPOSITORY)),
-    __metadata("design:paramtypes", [Object])
+    __param(1, (0, common_1.Inject)(DITokens_enum_1.DITokensRepository.CUSTOMER_ACTIVITY_REPOSITORY)),
+    __metadata("design:paramtypes", [Object, Object])
 ], ActivityService);
 //# sourceMappingURL=activity.service.js.map
