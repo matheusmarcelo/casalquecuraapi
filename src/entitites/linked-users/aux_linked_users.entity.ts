@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Customer } from "../customer/customer.entity";
 
 @Entity('aux_linked_users')
@@ -16,4 +16,7 @@ export class AuxLinkedUsers {
 
     @Column({ type: 'date', default: () => "CURRENT_DATE + INTERVAL '2 days'" })
     expirateAt?: Date;
+
+    @CreateDateColumn({ name: 'created_at', type: 'timestamp' })
+    createdAt?: Date;
 }

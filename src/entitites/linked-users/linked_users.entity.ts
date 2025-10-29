@@ -1,4 +1,4 @@
-import { Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Customer } from "../customer/customer.entity";
 
 @Entity('linked_users')
@@ -13,4 +13,7 @@ export class LinkedUsers {
     @ManyToOne(type => Customer, (customer) => customer.id)
     @JoinColumn({ name: 'user_id2' })
     user2: Customer;
+
+    @CreateDateColumn({ name: 'created_at', type: 'timestamp' })
+    createdAt?: Date;
 }
