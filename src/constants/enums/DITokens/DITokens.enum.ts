@@ -9,4 +9,5 @@ export enum DITokensService {
     CUSTOMER_SERVICE = 'ICustomerService',
     ACTIVITY_SERVICE = 'IActivityService',
     CUSTOMER_ACTIVITY_SERVICE = 'ICustomerActivityService',
+    LINKED_USERS_SERVICE = 'ILinkedUsersService'
 }
