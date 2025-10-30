@@ -5,9 +5,9 @@ export class LinkedUsersDto {
     @IsNotEmpty({ message: 'The requester id must have a value' })
     fromId: string;
 
-    @IsString({ message: 'The receiver id must be string type' })
-    @IsNotEmpty({ message: 'The receiver id must have a value' })
-    toId: string;
+    @IsString({ message: 'The receiver email must be string type' })
+    @IsNotEmpty({ message: 'The receiver email must have a value' })
+    emailReceiver: string;
 
     isRequester: boolean;
 
