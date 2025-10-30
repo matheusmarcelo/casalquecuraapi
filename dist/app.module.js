@@ -16,6 +16,7 @@ const db_module_1 = require("./infra/db.module");
 const activity_module_1 = require("./modules/activity/activity.module");
 const customer_activity_module_1 = require("./modules/customer_activity/customer_activity.module");
 const linked_users_module_1 = require("./modules/linked_users/linked_users.module");
+const auth_module_1 = require("./modules/auth/auth.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -27,7 +28,8 @@ exports.AppModule = AppModule = __decorate([
             db_module_1.DBModule,
             activity_module_1.ActivityModule,
             customer_activity_module_1.CustomerActivityModule,
-            linked_users_module_1.LinkedUsersModule
+            linked_users_module_1.LinkedUsersModule,
+            auth_module_1.AuthModule
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],

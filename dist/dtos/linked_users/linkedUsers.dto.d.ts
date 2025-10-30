@@ -1,6 +1,6 @@
 export declare class LinkedUsersDto {
     fromId: string;
-    toId: string;
+    emailReceiver: string;
     isRequester: boolean;
     id?: string;
     expirateAt?: Date;

@@ -16,6 +16,8 @@ exports.CustomerActivityController = void 0;
 const common_1 = require("@nestjs/common");
 const DITokens_enum_1 = require("../../constants/enums/DITokens/DITokens.enum");
 const customerActivity_dto_1 = require("../../dtos/customer_activity/customerActivity.dto");
+const admin_guard_1 = require("../../guards/admin/admin.guard");
+const auth_guard_1 = require("../../guards/auth/auth.guard");
 let CustomerActivityController = class CustomerActivityController {
     customerActivityService;
     constructor(customerActivityService) {
@@ -35,6 +37,7 @@ let CustomerActivityController = class CustomerActivityController {
 exports.CustomerActivityController = CustomerActivityController;
 __decorate([
     (0, common_1.Post)(''),
+    (0, common_1.UseGuards)(auth_guard_1.AuthGuard, admin_guard_1.AdminGuard),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [customerActivity_dto_1.CustomerActivityDto]),
@@ -42,6 +45,7 @@ __decorate([
 ], CustomerActivityController.prototype, "createCustomerActivityAsync", null);
 __decorate([
     (0, common_1.Get)('/:customerId'),
+    (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
     __param(0, (0, common_1.Param)('customerId')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -50,6 +54,7 @@ __decorate([
 __decorate([
     (0, common_1.Delete)('/:id'),
     (0, common_1.HttpCode)(common_1.HttpStatus.OK),
+    (0, common_1.UseGuards)(auth_guard_1.AuthGuard, admin_guard_1.AdminGuard),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),

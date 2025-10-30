@@ -22,6 +22,13 @@ let CustomerService = class CustomerService {
     constructor(customerRepository) {
         this.customerRepository = customerRepository;
     }
+    async getCustomerByEmail(email) {
+        const customerFound = await this.customerRepository.getCustomerByEmail(email);
+        if (!customerFound) {
+            throw new common_1.HttpException('Customer not found', common_1.HttpStatus.NOT_FOUND);
+        }
+        return customerFound;
+    }
     async createCustomerAsync(customerDto) {
         const customer = await this.customerRepository.getCustomerByEmail(customerDto.email);
         if (customer) {

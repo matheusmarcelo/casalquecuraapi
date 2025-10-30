@@ -14,5 +14,6 @@ var DITokensService;
     DITokensService["ACTIVITY_SERVICE"] = "IActivityService";
     DITokensService["CUSTOMER_ACTIVITY_SERVICE"] = "ICustomerActivityService";
     DITokensService["LINKED_USERS_SERVICE"] = "ILinkedUsersService";
+    DITokensService["AUTH_SERVICE"] = "IAuthService";
 })(DITokensService || (exports.DITokensService = DITokensService = {}));
 //# sourceMappingURL=DITokens.enum.js.map

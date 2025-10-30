@@ -17,6 +17,8 @@ const common_1 = require("@nestjs/common");
 const DITokens_enum_1 = require("../../constants/enums/DITokens/DITokens.enum");
 const activity_dto_1 = require("../../dtos/activity/activity.dto");
 const findActivities_dto_1 = require("../../dtos/activity/findActivities.dto");
+const admin_guard_1 = require("../../guards/admin/admin.guard");
+const auth_guard_1 = require("../../guards/auth/auth.guard");
 let ActivityController = class ActivityController {
     activityService;
     constructor(activityService) {
@@ -43,6 +45,7 @@ let ActivityController = class ActivityController {
 exports.ActivityController = ActivityController;
 __decorate([
     (0, common_1.Post)(''),
+    (0, common_1.UseGuards)(auth_guard_1.AuthGuard, admin_guard_1.AdminGuard),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [activity_dto_1.ActivityDto]),
@@ -51,6 +54,7 @@ __decorate([
 __decorate([
     (0, common_1.Put)('/:id'),
     (0, common_1.HttpCode)(common_1.HttpStatus.OK),
+    (0, common_1.UseGuards)(auth_guard_1.AuthGuard, admin_guard_1.AdminGuard),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -59,6 +63,7 @@ __decorate([
 ], ActivityController.prototype, "updateActivityAsync", null);
 __decorate([
     (0, common_1.Get)('/:id'),
+    (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -66,6 +71,7 @@ __decorate([
 ], ActivityController.prototype, "getActivityAsync", null);
 __decorate([
     (0, common_1.Get)(''),
+    (0, common_1.UseGuards)(auth_guard_1.AuthGuard, admin_guard_1.AdminGuard),
     __param(0, (0, common_1.Query)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [findActivities_dto_1.FindActivitiesDto]),
@@ -73,6 +79,7 @@ __decorate([
 ], ActivityController.prototype, "getActivitiesAsync", null);
 __decorate([
     (0, common_1.Delete)('/:id'),
+    (0, common_1.UseGuards)(auth_guard_1.AuthGuard, admin_guard_1.AdminGuard),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),

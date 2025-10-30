@@ -17,18 +17,23 @@ const common_1 = require("@nestjs/common");
 const DITokens_enum_1 = require("../../constants/enums/DITokens/DITokens.enum");
 let LinkedUsersService = class LinkedUsersService {
     linkedUsersRepository;
-    constructor(linkedUsersRepository) {
+    customerRepository;
+    constructor(linkedUsersRepository, customerRepository) {
         this.linkedUsersRepository = linkedUsersRepository;
+        this.customerRepository = customerRepository;
     }
     async createLinkedUsersTemporaryAsync(linkedUsers) {
-        const linkedUsersFound = await this.linkedUsersRepository.getLinkedUsersByCustomersIdAsync(linkedUsers.fromId, linkedUsers.toId);
-        console.log(linkedUsersFound);
+        const receiver = await this.customerRepository.getCustomerByEmail(linkedUsers.emailReceiver);
+        if (!receiver) {
+            throw new common_1.HttpException('Receiver not found', common_1.HttpStatus.NOT_FOUND);
+        }
+        const linkedUsersFound = await this.linkedUsersRepository.getLinkedUsersByCustomersIdAsync(linkedUsers.fromId, receiver.id);
         if (linkedUsersFound) {
             throw new common_1.HttpException('Those users already linked', common_1.HttpStatus.BAD_REQUEST);
         }
         const auxLinkedUsers = {
             from: { id: linkedUsers.fromId },
-            to: { id: linkedUsers.toId },
+            to: { id: receiver.id },
         };
         await this.linkedUsersRepository.createLinkedUsersTemporaryAsync(auxLinkedUsers);
     }
@@ -63,7 +68,6 @@ let LinkedUsersService = class LinkedUsersService {
         if (!linkedUsersTemporary) {
             throw new common_1.HttpException('Solicitation not found', common_1.HttpStatus.NOT_FOUND);
         }
-        console.log(linkedUsersTemporary);
         if (!linkedUsersTemporary.expirateAt) {
             await this.linkedUsersRepository.deleteLinkedUsersTemporaryAsync(linkedUsersTemporary.id);
             throw new common_1.HttpException('The request to link the accounts has expired.', common_1.HttpStatus.BAD_REQUEST);
@@ -92,6 +96,7 @@ exports.LinkedUsersService = LinkedUsersService;
 exports.LinkedUsersService = LinkedUsersService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, common_1.Inject)(DITokens_enum_1.DITokensRepository.LINKED_USERS_REPOSITORY)),
-    __metadata("design:paramtypes", [Object])
+    __param(1, (0, common_1.Inject)(DITokens_enum_1.DITokensRepository.CUSTOMER_REPOSITORY)),
+    __metadata("design:paramtypes", [Object, Object])
 ], LinkedUsersService);
 //# sourceMappingURL=linked_users.service.js.map

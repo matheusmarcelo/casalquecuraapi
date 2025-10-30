@@ -52,8 +52,8 @@ let LinkedUsersRepositoryPostgresql = class LinkedUsersRepositoryPostgresql {
                     name: true
                 },
                 to: {
-                    id: true,
-                    name: true
+                    name: true,
+                    email: true
                 }
             }
         });
@@ -97,7 +97,7 @@ let LinkedUsersRepositoryPostgresql = class LinkedUsersRepositoryPostgresql {
         return {
             id: linkedUser.id,
             fromId: linkedUser.from.id,
-            toId: linkedUser.to.id,
+            emailReceiver: linkedUser.to.email,
             isRequester: isRequester,
             expirateAt: linkedUser.expirateAt,
         };

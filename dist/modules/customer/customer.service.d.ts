@@ -6,6 +6,7 @@ import { Customer } from 'src/entitites/customer/customer.entity';
 export declare class CustomerService implements ICustomerService {
     private readonly customerRepository;
     constructor(customerRepository: ICustomerRepository);
+    getCustomerByEmail(email: string): Promise<Customer | null>;
     createCustomerAsync(customerDto: CustomerDto): Promise<void>;
     getCustomerByIdAsync(id: string): Promise<Customer | null>;
     getCustomersAsync(params: FindCustomersDto): Promise<Customer[]>;

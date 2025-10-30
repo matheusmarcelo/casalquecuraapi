@@ -18,6 +18,8 @@ const DITokens_enum_1 = require("../../constants/enums/DITokens/DITokens.enum");
 const customer_dto_1 = require("../../dtos/customer/customer.dto");
 const findCustomers_dto_1 = require("../../dtos/customer/findCustomers.dto");
 const customer_entity_1 = require("../../entitites/customer/customer.entity");
+const admin_guard_1 = require("../../guards/admin/admin.guard");
+const auth_guard_1 = require("../../guards/auth/auth.guard");
 let CustomerController = class CustomerController {
     customerService;
     constructor(customerService) {
@@ -45,6 +47,7 @@ exports.CustomerController = CustomerController;
 __decorate([
     (0, common_1.Post)(''),
     (0, common_1.HttpCode)(common_1.HttpStatus.CREATED),
+    (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [customer_dto_1.CustomerDto]),
@@ -53,6 +56,7 @@ __decorate([
 __decorate([
     (0, common_1.Put)('/:id'),
     (0, common_1.HttpCode)(common_1.HttpStatus.OK),
+    (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -61,6 +65,7 @@ __decorate([
 ], CustomerController.prototype, "updateCustomerAsync", null);
 __decorate([
     (0, common_1.Get)('/:id'),
+    (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -68,6 +73,7 @@ __decorate([
 ], CustomerController.prototype, "getCustomerAsync", null);
 __decorate([
     (0, common_1.Get)(''),
+    (0, common_1.UseGuards)(auth_guard_1.AuthGuard, admin_guard_1.AdminGuard),
     __param(0, (0, common_1.Query)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [findCustomers_dto_1.FindCustomersDto]),
@@ -75,6 +81,7 @@ __decorate([
 ], CustomerController.prototype, "getCustomersAsync", null);
 __decorate([
     (0, common_1.Post)('/:id/disable'),
+    (0, common_1.UseGuards)(auth_guard_1.AuthGuard, admin_guard_1.AdminGuard),
     (0, common_1.HttpCode)(common_1.HttpStatus.OK),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),

@@ -9,24 +9,25 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.LinkedUsersDto = void 0;
+exports.AuthRequestDto = void 0;
 const class_validator_1 = require("class-validator");
-class LinkedUsersDto {
-    fromId;
-    emailReceiver;
-    isRequester;
-    id;
-    expirateAt;
+class AuthRequestDto {
+    username;
+    password;
 }
-exports.LinkedUsersDto = LinkedUsersDto;
+exports.AuthRequestDto = AuthRequestDto;
 __decorate([
-    (0, class_validator_1.IsString)({ message: 'The requester id must be string type' }),
-    (0, class_validator_1.IsNotEmpty)({ message: 'The requester id must have a value' }),
+    (0, class_validator_1.IsString)({ message: 'Username must be a string type' }),
+    (0, class_validator_1.IsNotEmpty)({ message: 'Username must have a value' }),
+    (0, class_validator_1.MaxLength)(50, { message: 'Max 50 character for username' }),
+    (0, class_validator_1.MinLength)(1, { message: 'Min 1 character for username' }),
     __metadata("design:type", String)
-], LinkedUsersDto.prototype, "fromId", void 0);
+], AuthRequestDto.prototype, "username", void 0);
 __decorate([
-    (0, class_validator_1.IsString)({ message: 'The receiver email must be string type' }),
-    (0, class_validator_1.IsNotEmpty)({ message: 'The receiver email must have a value' }),
+    (0, class_validator_1.IsString)({ message: 'Password must be a string type' }),
+    (0, class_validator_1.IsNotEmpty)({ message: 'Password must have a value' }),
+    (0, class_validator_1.MaxLength)(50, { message: 'Max 50 character for Password' }),
+    (0, class_validator_1.MinLength)(1, { message: 'Min 1 character for Password' }),
     __metadata("design:type", String)
-], LinkedUsersDto.prototype, "emailReceiver", void 0);
-//# sourceMappingURL=linkedUsers.dto.js.map
+], AuthRequestDto.prototype, "password", void 0);
+//# sourceMappingURL=authRequest.dto.js.map
