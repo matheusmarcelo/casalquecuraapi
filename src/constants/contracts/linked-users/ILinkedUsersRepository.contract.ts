@@ -10,4 +10,5 @@ export interface ILinkedUsersRepository {
     getLinkedUsersTemporaryAsync(customerId: string): Promise<LinkedUsersDto | null>;
     getLinkedUsersAsync(customerId: string): Promise<LinkedUsers | null>;
     getLinkedUsersByCustomersIdAsync(fromId: string, toId: string): Promise<LinkedUsers | null>;
+    getLinkedUsersSolicitationAsync(id: string): Promise<AuxLinkedUsers | null>
 }
