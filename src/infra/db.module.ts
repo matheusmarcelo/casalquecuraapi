@@ -8,6 +8,9 @@ import { ActivityRepositoryPostgresql } from './postgresql/repositories/activity
 import { Activity } from 'src/entitites/activity/activity.entity';
 import { CustomerActivityRepositoryPostgresql } from './postgresql/repositories/customer_activity/customer-activity-repository.postgresql';
 import { CustomerActivity } from 'src/entitites/customer-activity/customer-activity.entity';
+import { LinkedUsersRepositoryPostgresql } from './postgresql/repositories/linked_users/linked-users-repository.postgresql';
+import { AuxLinkedUsers } from 'src/entitites/linked-users/aux_linked_users.entity';
+import { LinkedUsers } from 'src/entitites/linked-users/linked_users.entity';
 
 const repositoryProviders = [
     {
@@ -21,6 +24,10 @@ const repositoryProviders = [
     {
         provide: DITokensRepository.CUSTOMER_ACTIVITY_REPOSITORY,
         useClass: CustomerActivityRepositoryPostgresql
+    },
+    {
+        provide: DITokensRepository.LINKED_USERS_REPOSITORY,
+        useClass: LinkedUsersRepositoryPostgresql
     },
 ];
 
@@ -41,7 +48,13 @@ const repositoryProviders = [
             }),
             inject: [ConfigService],
         }),
-        TypeOrmModule.forFeature([Customer, Activity, CustomerActivity]),
+        TypeOrmModule.forFeature([
+            Customer,
+            Activity,
+            CustomerActivity,
+            AuxLinkedUsers,
+            LinkedUsers
+        ]),
     ],
     providers: [...repositoryProviders],
     exports: [...repositoryProviders],
