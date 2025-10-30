@@ -1,4 +1,5 @@
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import type { ICustomerRepository } from 'src/constants/contracts/customer/ICustomerRepository.contract';
 import type { ILinkedUsersRepository } from 'src/constants/contracts/linked-users/ILinkedUsersRepository.contract';
 import { ILinkedUsersService } from 'src/constants/contracts/linked-users/ILinkedUsersService.contract';
 import { DITokensRepository } from 'src/constants/enums/DITokens/DITokens.enum';
@@ -12,13 +13,21 @@ export class LinkedUsersService implements ILinkedUsersService {
 
     constructor(
         @Inject(DITokensRepository.LINKED_USERS_REPOSITORY)
-        private readonly linkedUsersRepository: ILinkedUsersRepository
+        private readonly linkedUsersRepository: ILinkedUsersRepository,
+        @Inject(DITokensRepository.CUSTOMER_REPOSITORY)
+        private readonly customerRepository: ICustomerRepository,
     ) { }
 
     async createLinkedUsersTemporaryAsync(linkedUsers: LinkedUsersDto): Promise<void> {
+        const receiver = await this.customerRepository.getCustomerByEmail(linkedUsers.emailReceiver);
+
+        if (!receiver) {
+            throw new HttpException('Receiver not found', HttpStatus.NOT_FOUND);
+        }
+
         const linkedUsersFound = await this.linkedUsersRepository.getLinkedUsersByCustomersIdAsync(
             linkedUsers.fromId,
-            linkedUsers.toId,
+            receiver.id!,
         );
 
         if (linkedUsersFound) {
@@ -27,7 +36,7 @@ export class LinkedUsersService implements ILinkedUsersService {
 
         const auxLinkedUsers: AuxLinkedUsers = {
             from: { id: linkedUsers.fromId } as Customer,
-            to: { id: linkedUsers.toId } as Customer,
+            to: { id: receiver.id! } as Customer,
         }
 
         await this.linkedUsersRepository.createLinkedUsersTemporaryAsync(auxLinkedUsers);
