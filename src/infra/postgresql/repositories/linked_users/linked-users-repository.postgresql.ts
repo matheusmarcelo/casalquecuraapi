@@ -47,8 +47,8 @@ export class LinkedUsersRepositoryPostgresql implements ILinkedUsersRepository {
                     name: true
                 },
                 to: {
-                    id: true,
-                    name: true
+                    name: true,
+                    email: true
                 }
             }
         });
@@ -97,7 +97,7 @@ export class LinkedUsersRepositoryPostgresql implements ILinkedUsersRepository {
         return {
             id: linkedUser.id,
             fromId: linkedUser.from.id!,
-            toId: linkedUser.to.id!,
+            emailReceiver: linkedUser.to.email,
             isRequester: isRequester,
             expirateAt: linkedUser.expirateAt,
         };
