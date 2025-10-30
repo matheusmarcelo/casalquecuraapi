@@ -21,8 +21,6 @@ export class LinkedUsersService implements ILinkedUsersService {
             linkedUsers.toId,
         );
 
-        console.log(linkedUsersFound)
-
         if (linkedUsersFound) {
             throw new HttpException('Those users already linked', HttpStatus.BAD_REQUEST);
         }
@@ -78,8 +76,6 @@ export class LinkedUsersService implements ILinkedUsersService {
         if (!linkedUsersTemporary) {
             throw new HttpException('Solicitation not found', HttpStatus.NOT_FOUND);
         }
-
-        console.log(linkedUsersTemporary)
 
         if (!linkedUsersTemporary.expirateAt) {
             await this.linkedUsersRepository.deleteLinkedUsersTemporaryAsync(linkedUsersTemporary.id!);
