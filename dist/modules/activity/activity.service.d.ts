@@ -1,6 +1,6 @@
 import type { IActivityRepository } from 'src/constants/contracts/activity/IActivityRepository.contract';
 import { IActivityService } from 'src/constants/contracts/activity/IActivityService.contract';
-import type { ICustomerActivityRepository } from 'src/constants/contracts/customer_activity/ICustomerActivitiesRepository.contract';
+import type { ICustomerActivityRepository } from 'src/constants/contracts/customer-activity/ICustomerActivitiesRepository.contract';
 import { ActivityDto } from 'src/dtos/activity/activity.dto';
 import { FindActivitiesDto } from 'src/dtos/activity/findActivities.dto';
 import { Activity } from 'src/entitites/activity/activity.entity';

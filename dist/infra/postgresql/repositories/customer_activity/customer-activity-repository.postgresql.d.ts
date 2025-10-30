@@ -1,4 +1,4 @@
-import { ICustomerActivityRepository } from 'src/constants/contracts/customer_activity/ICustomerActivitiesRepository.contract';
+import { ICustomerActivityRepository } from 'src/constants/contracts/customer-activity/ICustomerActivitiesRepository.contract';
 import { CustomerActivity } from 'src/entitites/customer-activity/customer-activity.entity';
 import { Repository } from 'typeorm';
 export declare class CustomerActivityRepositoryPostgresql implements ICustomerActivityRepository {

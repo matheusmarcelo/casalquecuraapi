@@ -17,6 +17,9 @@ const activity_repository_postgresql_1 = require("./postgresql/repositories/acti
 const activity_entity_1 = require("../entitites/activity/activity.entity");
 const customer_activity_repository_postgresql_1 = require("./postgresql/repositories/customer_activity/customer-activity-repository.postgresql");
 const customer_activity_entity_1 = require("../entitites/customer-activity/customer-activity.entity");
+const linked_users_repository_postgresql_1 = require("./postgresql/repositories/linked_users/linked-users-repository.postgresql");
+const aux_linked_users_entity_1 = require("../entitites/linked-users/aux_linked_users.entity");
+const linked_users_entity_1 = require("../entitites/linked-users/linked_users.entity");
 const repositoryProviders = [
     {
         provide: DITokens_enum_1.DITokensRepository.CUSTOMER_REPOSITORY,
@@ -29,6 +32,10 @@ const repositoryProviders = [
     {
         provide: DITokens_enum_1.DITokensRepository.CUSTOMER_ACTIVITY_REPOSITORY,
         useClass: customer_activity_repository_postgresql_1.CustomerActivityRepositoryPostgresql
+    },
+    {
+        provide: DITokens_enum_1.DITokensRepository.LINKED_USERS_REPOSITORY,
+        useClass: linked_users_repository_postgresql_1.LinkedUsersRepositoryPostgresql
     },
 ];
 let DBModule = class DBModule {
@@ -52,7 +59,13 @@ exports.DBModule = DBModule = __decorate([
                 }),
                 inject: [config_1.ConfigService],
             }),
-            typeorm_1.TypeOrmModule.forFeature([customer_entity_1.Customer, activity_entity_1.Activity, customer_activity_entity_1.CustomerActivity]),
+            typeorm_1.TypeOrmModule.forFeature([
+                customer_entity_1.Customer,
+                activity_entity_1.Activity,
+                customer_activity_entity_1.CustomerActivity,
+                aux_linked_users_entity_1.AuxLinkedUsers,
+                linked_users_entity_1.LinkedUsers
+            ]),
         ],
         providers: [...repositoryProviders],
         exports: [...repositoryProviders],

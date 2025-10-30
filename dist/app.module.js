@@ -15,6 +15,7 @@ const config_1 = require("@nestjs/config");
 const db_module_1 = require("./infra/db.module");
 const activity_module_1 = require("./modules/activity/activity.module");
 const customer_activity_module_1 = require("./modules/customer_activity/customer_activity.module");
+const linked_users_module_1 = require("./modules/linked_users/linked_users.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -25,7 +26,8 @@ exports.AppModule = AppModule = __decorate([
             customer_module_1.CustomerModule,
             db_module_1.DBModule,
             activity_module_1.ActivityModule,
-            customer_activity_module_1.CustomerActivityModule
+            customer_activity_module_1.CustomerActivityModule,
+            linked_users_module_1.LinkedUsersModule
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],

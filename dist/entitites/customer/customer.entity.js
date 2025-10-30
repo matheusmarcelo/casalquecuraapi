@@ -14,6 +14,8 @@ const userRole_enum_1 = require("../../constants/enums/userRole.enum");
 const typeorm_1 = require("typeorm");
 const customer_activity_entity_1 = require("../customer-activity/customer-activity.entity");
 const uuid_1 = require("uuid");
+const aux_linked_users_entity_1 = require("../linked-users/aux_linked_users.entity");
+const linked_users_entity_1 = require("../linked-users/linked_users.entity");
 let Customer = class Customer {
     id;
     generateId() {
@@ -37,6 +39,10 @@ let Customer = class Customer {
     updatedAt;
     isActive;
     customers;
+    user1;
+    user2;
+    fromAuxLinkedUsers;
+    toAuxLinkedUsers;
 };
 exports.Customer = Customer;
 __decorate([
@@ -113,6 +119,22 @@ __decorate([
     (0, typeorm_1.OneToMany)(type => customer_activity_entity_1.CustomerActivity, (customer_activity) => customer_activity.customer),
     __metadata("design:type", Array)
 ], Customer.prototype, "customers", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(type => linked_users_entity_1.LinkedUsers, (linkedUsers) => linkedUsers.user1),
+    __metadata("design:type", Array)
+], Customer.prototype, "user1", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(type => linked_users_entity_1.LinkedUsers, (linkedUsers) => linkedUsers.user2),
+    __metadata("design:type", Array)
+], Customer.prototype, "user2", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(type => aux_linked_users_entity_1.AuxLinkedUsers, (auxLinkedUsers) => auxLinkedUsers.from),
+    __metadata("design:type", Array)
+], Customer.prototype, "fromAuxLinkedUsers", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(type => aux_linked_users_entity_1.AuxLinkedUsers, (auxLinkedUsers) => auxLinkedUsers.to),
+    __metadata("design:type", Array)
+], Customer.prototype, "toAuxLinkedUsers", void 0);
 exports.Customer = Customer = __decorate([
     (0, typeorm_1.Entity)({ name: 'users' })
 ], Customer);
