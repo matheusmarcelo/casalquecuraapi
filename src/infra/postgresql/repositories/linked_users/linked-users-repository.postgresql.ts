@@ -33,31 +33,35 @@ export class LinkedUsersRepositoryPostgresql implements ILinkedUsersRepository {
     }
 
     async getLinkedUsersTemporaryAsync(customerId: string): Promise<LinkedUsersDto | null> {
-        const requester = await this.auxLinkedUsersRepository.findOne({
-            where: {
-                from: { id: customerId }
-            },
-            relations: ['to']
+        const response = await this.auxLinkedUsersRepository.findOne({
+            where: [
+                { from: { id: customerId } },
+                { to: { id: customerId } },
+            ],
+            relations: ['from', 'to'],
+            select: {
+                id: true,
+                expirateAt: true,
+                from: {
+                    id: true,
+                    name: true
+                },
+                to: {
+                    id: true,
+                    name: true
+                }
+            }
         });
 
-        if (!requester) {
-            const receiver = await this.auxLinkedUsersRepository.findOne({
-                where: {
-                    to: { id: customerId }
-                },
-                relations: ['from']
-            });
+        if (!response) return null;
 
-            if (!receiver) {
-                return null;
-            }
+        const isRequester = response.from.id === customerId;
+        return this.mapAuxLinkedUserToLinkedUserDto(response, isRequester);
+    }
 
-            const isRequester = false;
-            return this.mapAuxLinkedUserToLinkedUserDto(receiver, isRequester);
-        }
-
-        const isRequester = true;
-        return this.mapAuxLinkedUserToLinkedUserDto(requester, isRequester);
+    async getLinkedUsersSolicitationAsync(id: string): Promise<AuxLinkedUsers | null> {
+        const solicitation = await this.auxLinkedUsersRepository.findOne({ where: { id }, relations: ['from', 'to'] });
+        return solicitation;
     }
 
     async getLinkedUsersAsync(customerId: string): Promise<LinkedUsers | null> {
@@ -66,7 +70,16 @@ export class LinkedUsersRepositoryPostgresql implements ILinkedUsersRepository {
                 { user1: { id: customerId } },
                 { user2: { id: customerId } }
             ],
-            relations: ['user1', 'user2']
+            relations: ['user1', 'user2'],
+            select: {
+                id: true,
+                user1: {
+                    name: true
+                },
+                user2: {
+                    name: true
+                }
+            }
         });
     }
 
@@ -82,9 +95,11 @@ export class LinkedUsersRepositoryPostgresql implements ILinkedUsersRepository {
 
     private mapAuxLinkedUserToLinkedUserDto(linkedUser: AuxLinkedUsers, isRequester: boolean): LinkedUsersDto {
         return {
+            id: linkedUser.id,
             fromId: linkedUser.from.id!,
             toId: linkedUser.to.id!,
             isRequester: isRequester,
+            expirateAt: linkedUser.expirateAt,
         };
     }
 }
