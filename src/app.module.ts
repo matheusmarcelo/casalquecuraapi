@@ -6,6 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 import { DBModule } from './infra/db.module';
 import { ActivityModule } from './modules/activity/activity.module';
 import { CustomerActivityModule } from './modules/customer_activity/customer_activity.module';
+import { LinkedUsersModule } from './modules/linked_users/linked_users.module';
 
 @Module({
   imports: [
@@ -13,7 +14,8 @@ import { CustomerActivityModule } from './modules/customer_activity/customer_act
     CustomerModule,
     DBModule,
     ActivityModule,
-    CustomerActivityModule
+    CustomerActivityModule,
+    LinkedUsersModule
   ],
   controllers: [AppController],
   providers: [AppService],
