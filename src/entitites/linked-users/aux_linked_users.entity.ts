@@ -14,7 +14,7 @@ export class AuxLinkedUsers {
     @JoinColumn({ name: 'to_user_id' })
     to: Customer;
 
-    @Column({ type: 'date', default: () => "CURRENT_DATE + INTERVAL '2 days'" })
+    @Column({ name: 'expirate_at', type: 'date', default: () => "CURRENT_DATE + INTERVAL '2 days'" })
     expirateAt?: Date;
 
     @CreateDateColumn({ name: 'created_at', type: 'timestamp' })
