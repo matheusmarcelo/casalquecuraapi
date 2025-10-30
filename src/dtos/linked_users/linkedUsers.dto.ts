@@ -10,4 +10,8 @@ export class LinkedUsersDto {
     toId: string;
 
     isRequester: boolean;
+
+    id?: string;
+
+    expirateAt?: Date;
 }
