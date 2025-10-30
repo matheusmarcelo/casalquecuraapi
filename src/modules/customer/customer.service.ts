@@ -15,6 +15,16 @@ export class CustomerService implements ICustomerService {
         private readonly customerRepository: ICustomerRepository
     ) { }
 
+    async getCustomerByEmail(email: string): Promise<Customer | null> {
+        const customerFound = await this.customerRepository.getCustomerByEmail(email);
+
+        if (!customerFound) {
+            throw new HttpException('Customer not found', HttpStatus.NOT_FOUND);
+        }
+
+        return customerFound;
+    }
+
     async createCustomerAsync(customerDto: CustomerDto): Promise<void> {
         const customer = await this.customerRepository.getCustomerByEmail(customerDto.email);
 
