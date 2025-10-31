@@ -13,6 +13,10 @@ import { AuxLinkedUsers } from 'src/entitites/linked-users/aux_linked_users.enti
 import { LinkedUsers } from 'src/entitites/linked-users/linked_users.entity';
 import { ResetPasswordRepositoryPostgresql } from './postgresql/repositories/reset_password/reset-password-repository.postgresql';
 import { ResetPassword } from 'src/entitites/reset-password/reset_password.entity';
+import { DalyActivitiesRepositoryPostgresql } from './postgresql/repositories/daly_activities/daly-activities-repository.postgresql';
+import { MonthActivitiesRepositoryPostgresql } from './postgresql/repositories/month_activities/month-activities-repository.postgresql';
+import { DalyActivities } from 'src/entitites/daly-activities/daly_activities.entity';
+import { MonthActivities } from 'src/entitites/mont-activities/month_activities.entity';
 
 const repositoryProviders = [
     {
@@ -34,6 +38,14 @@ const repositoryProviders = [
     {
         provide: DITokensRepository.RESET_PASSWORD_REPOSITORY,
         useClass: ResetPasswordRepositoryPostgresql
+    },
+    {
+        provide: DITokensRepository.DALY_ACTIVITIES_REPOSITORY,
+        useClass: DalyActivitiesRepositoryPostgresql
+    },
+    {
+        provide: DITokensRepository.MONTH_ACTIVITIES_REPOSITORY,
+        useClass: MonthActivitiesRepositoryPostgresql
     },
 ];
 
@@ -60,7 +72,9 @@ const repositoryProviders = [
             CustomerActivity,
             AuxLinkedUsers,
             LinkedUsers,
-            ResetPassword
+            ResetPassword,
+            DalyActivities,
+            MonthActivities
         ]),
     ],
     providers: [...repositoryProviders],
