@@ -3,12 +3,15 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { IAuthService } from 'src/constants/contracts/auth/IAuthService.contract';
 import type { ICustomerService } from 'src/constants/contracts/customer/ICustomerService.contract';
-import { DITokensService } from 'src/constants/enums/DITokens/DITokens.enum';
+import { DITokensRepository, DITokensService } from 'src/constants/enums/DITokens/DITokens.enum';
 import { AuthRequestDto } from 'src/dtos/auth/authRequest.dto';
 import { compareSync as bcryptCompareSync } from 'bcrypt';
 import { AuthResponseDto } from 'src/dtos/auth/authResponse.dto';
 import { MailerService } from '../mailer/mailer.service';
 import { SendEmailDto } from 'src/dtos/mailer/mailer.dto';
+import { ResetPasswordDto } from 'src/dtos/reset_password/reset_password.dto';
+import { ResetPassword } from 'src/entitites/reset-password/reset_password.entity';
+import type { IResetPasswordRepository } from 'src/constants/contracts/reset-password/IResetPasswordRepository.contract';
 
 @Injectable()
 export class AuthService implements IAuthService {
@@ -16,6 +19,8 @@ export class AuthService implements IAuthService {
     constructor(
         @Inject(DITokensService.CUSTOMER_SERVICE)
         private readonly customerService: ICustomerService,
+        @Inject(DITokensRepository.RESET_PASSWORD_REPOSITORY)
+        private readonly resetPasswordRepository: IResetPasswordRepository,
         private readonly jwtService: JwtService,
         private readonly configService: ConfigService,
         private readonly mailerService: MailerService,
@@ -39,7 +44,7 @@ export class AuthService implements IAuthService {
         }
     }
 
-    async resetPassword(email: string): Promise<void> {
+    async recoverPassword(email: string, ipAddress: string): Promise<void> {
         const customer = await this.customerService.getCustomerByEmail(email);
 
         if (!customer) {
@@ -55,6 +60,13 @@ export class AuthService implements IAuthService {
             html: `<p><strong>token: ${token}</strong></p>, não compartilhe seu token`
         }
 
+        const resetPassword: ResetPassword = {
+            token: `${token}`,
+            ipAddress,
+            validated: false
+        }
+
+        await this.resetPasswordRepository.createResetPasswordAsync(resetPassword);
         return await this.mailerService.sendEmail(sendEmail);
     }
 
