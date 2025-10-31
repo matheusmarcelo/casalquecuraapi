@@ -1,5 +1,5 @@
-import { Body, Controller, Inject, Post } from '@nestjs/common';
-import { AuthService } from './auth.service';
+import { Body, Controller, Get, HttpCode, HttpStatus, Inject, Post, Req, } from '@nestjs/common';
+import type { Request } from 'express';
 import type { IAuthService } from 'src/constants/contracts/auth/IAuthService.contract';
 import { DITokensService } from 'src/constants/enums/DITokens/DITokens.enum';
 import { AuthRequestDto } from 'src/dtos/auth/authRequest.dto';
@@ -16,5 +16,12 @@ export class AuthController {
   async signIn(@Body() auth: AuthRequestDto): Promise<AuthResponseDto> {
     const authReponse = await this.authService.signIn(auth);
     return authReponse;
+  }
+
+  @Post('password-reset')
+  @HttpCode(HttpStatus.OK)
+  async resetPassword(@Body() body: Record<string, string>, @Req() req: Request): Promise<void | string> {
+    await this.authService.resetPassword(body.email);
+    return req.ip
   }
 }
