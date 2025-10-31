@@ -12,6 +12,7 @@ import { SendEmailDto } from 'src/dtos/mailer/mailer.dto';
 import { ResetPasswordDto } from 'src/dtos/reset_password/reset_password.dto';
 import { ResetPassword } from 'src/entitites/reset-password/reset_password.entity';
 import type { IResetPasswordRepository } from 'src/constants/contracts/reset-password/IResetPasswordRepository.contract';
+import { hashSync as bcryptHashSync } from 'bcrypt';
 
 @Injectable()
 export class AuthService implements IAuthService {
@@ -54,20 +55,55 @@ export class AuthService implements IAuthService {
         const token = this.generateToken();
 
         const sendEmail: SendEmailDto = {
-            from: { name: 'Matheus', address: 'matheusmarcelo314@gmail.com' },
-            recipients: [{ name: 'Marcelo', address: 'matheusmarcelo314@gmail.com' }],
-            subject: 'Reset password test',
+            from: {
+                name: this.configService.get<string>('APP_NAME')!,
+                address: this.configService.get<string>('MAIL_FROM')!
+            },
+            recipients: [
+                { name: customer.name, address: email }
+            ],
+            subject: 'Utilize o código para redefinir sua senha',
             html: `<p><strong>token: ${token}</strong></p>, não compartilhe seu token`
         }
 
         const resetPassword: ResetPassword = {
             token: `${token}`,
             ipAddress,
-            validated: false
+            validated: false,
         }
 
-        await this.resetPasswordRepository.createResetPasswordAsync(resetPassword);
+        await this.resetPasswordRepository.createRecoverPasswordAsync(resetPassword);
         return await this.mailerService.sendEmail(sendEmail);
+    }
+
+    async validateTokenAsync(token: string): Promise<void> {
+        const tokenFound = await this.resetPasswordRepository.getRecoverPasswordAsync(token);
+
+        if (!tokenFound) {
+            throw new HttpException('Token invalid', HttpStatus.NOT_FOUND);
+        }
+
+        const now = Date.now();
+        const expiresIn = new Date(tokenFound.expiresIn!);
+
+        if (now > expiresIn.getTime() || tokenFound.validated) {
+            throw new HttpException('Token invalid', HttpStatus.NOT_FOUND);
+        }
+
+        await this.resetPasswordRepository.validateTokenAsyncAsync(tokenFound.id!);
+    }
+
+    async resetPasswordAsync(resetPassword: ResetPasswordDto): Promise<void> {
+        const customer = await this.customerService.getCustomerByEmail(resetPassword.email);
+
+        if (!customer) {
+            throw new HttpException('Customer not found', HttpStatus.NOT_FOUND);
+        }
+
+        const saltOrRounds = 12;
+        customer.password = bcryptHashSync(customer.password, saltOrRounds);
+
+        await this.customerService.updateCustomerAsync(customer.id!, customer);
     }
 
     private generateToken(): number {
