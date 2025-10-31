@@ -18,14 +18,17 @@ const config_1 = require("@nestjs/config");
 const jwt_1 = require("@nestjs/jwt");
 const DITokens_enum_1 = require("../../constants/enums/DITokens/DITokens.enum");
 const bcrypt_1 = require("bcrypt");
+const mailer_service_1 = require("../mailer/mailer.service");
 let AuthService = class AuthService {
     customerService;
     jwtService;
     configService;
-    constructor(customerService, jwtService, configService) {
+    mailerService;
+    constructor(customerService, jwtService, configService, mailerService) {
         this.customerService = customerService;
         this.jwtService = jwtService;
         this.configService = configService;
+        this.mailerService = mailerService;
     }
     async signIn(auth) {
         const customer = await this.customerService.getCustomerByEmail(auth.username);
@@ -40,12 +43,30 @@ let AuthService = class AuthService {
             expiresIn: +this.configService.get('JWT_EXPIRATION_TIME'),
         };
     }
+    async resetPassword(email) {
+        const customer = await this.customerService.getCustomerByEmail(email);
+        if (!customer) {
+            throw new common_1.HttpException('Customer not found', common_1.HttpStatus.NOT_FOUND);
+        }
+        const token = this.generateToken();
+        const sendEmail = {
+            from: { name: 'Matheus', address: 'matheusmarcelo314@gmail.com' },
+            recipients: [{ name: 'Marcelo', address: 'matheusmarcelo314@gmail.com' }],
+            subject: 'Reset password test',
+            html: `<p><strong>token: ${token}</strong></p>, não compartilhe seu token`
+        };
+        return await this.mailerService.sendEmail(sendEmail);
+    }
+    generateToken() {
+        return Math.floor(100000 + Math.random() * 900000);
+    }
 };
 exports.AuthService = AuthService;
 exports.AuthService = AuthService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, common_1.Inject)(DITokens_enum_1.DITokensService.CUSTOMER_SERVICE)),
     __metadata("design:paramtypes", [Object, jwt_1.JwtService,
-        config_1.ConfigService])
+        config_1.ConfigService,
+        mailer_service_1.MailerService])
 ], AuthService);
 //# sourceMappingURL=auth.service.js.map

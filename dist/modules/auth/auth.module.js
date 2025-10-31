@@ -14,6 +14,7 @@ const jwt_1 = require("@nestjs/jwt");
 const config_1 = require("@nestjs/config");
 const DITokens_enum_1 = require("../../constants/enums/DITokens/DITokens.enum");
 const customer_service_1 = require("../customer/customer.service");
+const mailer_service_1 = require("../mailer/mailer.service");
 let AuthModule = class AuthModule {
 };
 exports.AuthModule = AuthModule;
@@ -30,7 +31,7 @@ exports.AuthModule = AuthModule = __decorate([
             }),
         ],
         controllers: [auth_controller_1.AuthController],
-        providers: [
+        providers: [mailer_service_1.MailerService,
             {
                 provide: DITokens_enum_1.DITokensService.AUTH_SERVICE,
                 useClass: auth_service_1.AuthService
