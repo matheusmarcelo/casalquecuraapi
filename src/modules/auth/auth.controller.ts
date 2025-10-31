@@ -4,6 +4,7 @@ import type { IAuthService } from 'src/constants/contracts/auth/IAuthService.con
 import { DITokensService } from 'src/constants/enums/DITokens/DITokens.enum';
 import { AuthRequestDto } from 'src/dtos/auth/authRequest.dto';
 import { AuthResponseDto } from 'src/dtos/auth/authResponse.dto';
+import { ResetPasswordDto } from 'src/dtos/reset_password/reset_password.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -23,5 +24,16 @@ export class AuthController {
   async recoverPassword(@Body() body: { email: string }, @Req() req: Request): Promise<void | string> {
     await this.authService.recoverPassword(body.email, `${req.ip}`);
     return req.ip;
+  }
+
+  @Post('validate-token')
+  @HttpCode(HttpStatus.OK)
+  async validateToken(@Body() body: { token: string }, @Req() req: Request): Promise<void> {
+    await this.authService.validateTokenAsync(body.token, `${req.ip}`);
+  }
+  @Post('reset-password')
+  @HttpCode(HttpStatus.OK)
+  async resetPassword(@Body() body: ResetPasswordDto): Promise<void> {
+    await this.authService.resetPasswordAsync(body);
   }
 }
