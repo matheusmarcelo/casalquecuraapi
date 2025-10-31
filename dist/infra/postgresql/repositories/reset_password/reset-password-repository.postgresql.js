@@ -22,13 +22,13 @@ let ResetPasswordRepositoryPostgresql = class ResetPasswordRepositoryPostgresql 
     constructor(resetPasswordRepository) {
         this.resetPasswordRepository = resetPasswordRepository;
     }
-    async createResetPasswordAsync(resetPassword) {
+    async createRecoverPasswordAsync(resetPassword) {
         await this.resetPasswordRepository.save(resetPassword);
     }
-    async getResetPasswordAsync(token) {
-        return await this.resetPasswordRepository.findOne({ where: { token, validated: false } });
+    async getRecoverPasswordAsync(token, ipAddress) {
+        return await this.resetPasswordRepository.findOne({ where: { token, ipAddress, validated: false } });
     }
-    async updateResetPasswordAsync(id) {
+    async validateTokenAsync(id) {
         await this.resetPasswordRepository.update(id, { validated: true });
     }
 };

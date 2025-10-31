@@ -16,6 +16,7 @@ exports.AuthController = void 0;
 const common_1 = require("@nestjs/common");
 const DITokens_enum_1 = require("../../constants/enums/DITokens/DITokens.enum");
 const authRequest_dto_1 = require("../../dtos/auth/authRequest.dto");
+const reset_password_dto_1 = require("../../dtos/reset_password/reset_password.dto");
 let AuthController = class AuthController {
     authService;
     constructor(authService) {
@@ -28,6 +29,12 @@ let AuthController = class AuthController {
     async recoverPassword(body, req) {
         await this.authService.recoverPassword(body.email, `${req.ip}`);
         return req.ip;
+    }
+    async validateToken(body, req) {
+        await this.authService.validateTokenAsync(body.token, `${req.ip}`);
+    }
+    async resetPassword(body) {
+        await this.authService.resetPasswordAsync(body);
     }
 };
 exports.AuthController = AuthController;
@@ -47,6 +54,23 @@ __decorate([
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "recoverPassword", null);
+__decorate([
+    (0, common_1.Post)('validate-token'),
+    (0, common_1.HttpCode)(common_1.HttpStatus.OK),
+    __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "validateToken", null);
+__decorate([
+    (0, common_1.Post)('reset-password'),
+    (0, common_1.HttpCode)(common_1.HttpStatus.OK),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [reset_password_dto_1.ResetPasswordDto]),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "resetPassword", null);
 exports.AuthController = AuthController = __decorate([
     (0, common_1.Controller)('auth'),
     __param(0, (0, common_1.Inject)(DITokens_enum_1.DITokensService.AUTH_SERVICE)),
