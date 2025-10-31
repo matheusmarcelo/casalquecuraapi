@@ -13,16 +13,15 @@ export class ResetPasswordRepositoryPostgresql implements IResetPasswordReposito
         private readonly resetPasswordRepository: Repository<ResetPassword>
     ) { }
 
-    async createResetPasswordAsync(resetPassword: ResetPassword): Promise<void> {
+    async createRecoverPasswordAsync(resetPassword: ResetPassword): Promise<void> {
         await this.resetPasswordRepository.save(resetPassword);
     }
 
-    async getResetPasswordAsync(token: string): Promise<ResetPassword | null> {
+    async getRecoverPasswordAsync(token: string): Promise<ResetPassword | null> {
         return await this.resetPasswordRepository.findOne({ where: { token, validated: false } });
     }
 
-    async updateResetPasswordAsync(id: string): Promise<void> {
+    async validateTokenAsyncAsync(id: string): Promise<void> {
         await this.resetPasswordRepository.update(id, { validated: true });
     }
-
 }
