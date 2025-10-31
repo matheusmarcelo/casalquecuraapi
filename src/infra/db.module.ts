@@ -11,6 +11,8 @@ import { CustomerActivity } from 'src/entitites/customer-activity/customer-activ
 import { LinkedUsersRepositoryPostgresql } from './postgresql/repositories/linked_users/linked-users-repository.postgresql';
 import { AuxLinkedUsers } from 'src/entitites/linked-users/aux_linked_users.entity';
 import { LinkedUsers } from 'src/entitites/linked-users/linked_users.entity';
+import { ResetPasswordRepositoryPostgresql } from './postgresql/repositories/reset_password/reset-password-repository.postgresql';
+import { ResetPassword } from 'src/entitites/reset-password/reset_password.entity';
 
 const repositoryProviders = [
     {
@@ -28,6 +30,10 @@ const repositoryProviders = [
     {
         provide: DITokensRepository.LINKED_USERS_REPOSITORY,
         useClass: LinkedUsersRepositoryPostgresql
+    },
+    {
+        provide: DITokensRepository.RESET_PASSWORD_REPOSITORY,
+        useClass: ResetPasswordRepositoryPostgresql
     },
 ];
 
@@ -53,7 +59,8 @@ const repositoryProviders = [
             Activity,
             CustomerActivity,
             AuxLinkedUsers,
-            LinkedUsers
+            LinkedUsers,
+            ResetPassword
         ]),
     ],
     providers: [...repositoryProviders],
