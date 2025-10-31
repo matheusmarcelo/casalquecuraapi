@@ -4,6 +4,7 @@ import { CustomerActivity } from "../customer-activity/customer-activity.entity"
 import { v4 as uuidv4 } from 'uuid';
 import { AuxLinkedUsers } from "../linked-users/aux_linked_users.entity";
 import { LinkedUsers } from "../linked-users/linked_users.entity";
+import { DalyActivities } from "../daly-activities/daly_activities.entity";
 
 @Entity({ name: 'users' })
 export class Customer {
@@ -76,4 +77,7 @@ export class Customer {
 
     @OneToMany(type => AuxLinkedUsers, (auxLinkedUsers) => auxLinkedUsers.to)
     toAuxLinkedUsers?: AuxLinkedUsers[];
+
+    @OneToMany(type => DalyActivities, (dalyActivities) => dalyActivities.id)
+    dalyActivities: DalyActivities[];
 }
