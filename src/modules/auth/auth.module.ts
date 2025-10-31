@@ -5,6 +5,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { DITokensService } from 'src/constants/enums/DITokens/DITokens.enum';
 import { CustomerService } from '../customer/customer.service';
+import { MailerService } from '../mailer/mailer.service';
 
 @Module({
   imports: [
@@ -18,7 +19,7 @@ import { CustomerService } from '../customer/customer.service';
     }),
   ],
   controllers: [AuthController],
-  providers: [
+  providers: [MailerService,
     {
       provide: DITokensService.AUTH_SERVICE,
       useClass: AuthService
