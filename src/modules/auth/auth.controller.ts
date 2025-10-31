@@ -18,10 +18,10 @@ export class AuthController {
     return authReponse;
   }
 
-  @Post('password-reset')
+  @Post('recover-password')
   @HttpCode(HttpStatus.OK)
-  async resetPassword(@Body() body: Record<string, string>, @Req() req: Request): Promise<void | string> {
-    await this.authService.resetPassword(body.email);
-    return req.ip
+  async recoverPassword(@Body() body: { email: string }, @Req() req: Request): Promise<void | string> {
+    await this.authService.recoverPassword(body.email, `${req.ip}`);
+    return req.ip;
   }
 }
