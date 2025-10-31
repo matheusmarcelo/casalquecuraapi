@@ -3,5 +3,5 @@ import { ResetPassword } from "src/entitites/reset-password/reset_password.entit
 export interface IResetPasswordRepository {
     createRecoverPasswordAsync(resetPassword: ResetPassword): Promise<void>;
     getRecoverPasswordAsync(token: string): Promise<ResetPassword | null>;
-    validateTokenAsyncAsync(id: string): Promise<void>;
+    validateTokenAsync(id: string): Promise<void>;
 }
