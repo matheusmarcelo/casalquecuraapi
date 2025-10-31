@@ -21,11 +21,13 @@ const bcrypt_1 = require("bcrypt");
 const mailer_service_1 = require("../mailer/mailer.service");
 let AuthService = class AuthService {
     customerService;
+    resetPasswordRepository;
     jwtService;
     configService;
     mailerService;
-    constructor(customerService, jwtService, configService, mailerService) {
+    constructor(customerService, resetPasswordRepository, jwtService, configService, mailerService) {
         this.customerService = customerService;
+        this.resetPasswordRepository = resetPasswordRepository;
         this.jwtService = jwtService;
         this.configService = configService;
         this.mailerService = mailerService;
@@ -43,7 +45,7 @@ let AuthService = class AuthService {
             expiresIn: +this.configService.get('JWT_EXPIRATION_TIME'),
         };
     }
-    async resetPassword(email) {
+    async recoverPassword(email, ipAddress) {
         const customer = await this.customerService.getCustomerByEmail(email);
         if (!customer) {
             throw new common_1.HttpException('Customer not found', common_1.HttpStatus.NOT_FOUND);
@@ -55,6 +57,12 @@ let AuthService = class AuthService {
             subject: 'Reset password test',
             html: `<p><strong>token: ${token}</strong></p>, não compartilhe seu token`
         };
+        const resetPassword = {
+            token: `${token}`,
+            ipAddress,
+            validated: false
+        };
+        await this.resetPasswordRepository.createResetPasswordAsync(resetPassword);
         return await this.mailerService.sendEmail(sendEmail);
     }
     generateToken() {
@@ -65,7 +73,8 @@ exports.AuthService = AuthService;
 exports.AuthService = AuthService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, common_1.Inject)(DITokens_enum_1.DITokensService.CUSTOMER_SERVICE)),
-    __metadata("design:paramtypes", [Object, jwt_1.JwtService,
+    __param(1, (0, common_1.Inject)(DITokens_enum_1.DITokensRepository.RESET_PASSWORD_REPOSITORY)),
+    __metadata("design:paramtypes", [Object, Object, jwt_1.JwtService,
         config_1.ConfigService,
         mailer_service_1.MailerService])
 ], AuthService);

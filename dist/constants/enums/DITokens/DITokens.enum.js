@@ -7,6 +7,7 @@ var DITokensRepository;
     DITokensRepository["ACTIVITY_REPOSITORY"] = "IActivityRepository";
     DITokensRepository["CUSTOMER_ACTIVITY_REPOSITORY"] = "ICustomerActivityRepository";
     DITokensRepository["LINKED_USERS_REPOSITORY"] = "ILinkedUsersRepository";
+    DITokensRepository["RESET_PASSWORD_REPOSITORY"] = "IResetPasswordRepository";
 })(DITokensRepository || (exports.DITokensRepository = DITokensRepository = {}));
 var DITokensService;
 (function (DITokensService) {

@@ -20,6 +20,8 @@ const customer_activity_entity_1 = require("../entitites/customer-activity/custo
 const linked_users_repository_postgresql_1 = require("./postgresql/repositories/linked_users/linked-users-repository.postgresql");
 const aux_linked_users_entity_1 = require("../entitites/linked-users/aux_linked_users.entity");
 const linked_users_entity_1 = require("../entitites/linked-users/linked_users.entity");
+const reset_password_repository_postgresql_1 = require("./postgresql/repositories/reset_password/reset-password-repository.postgresql");
+const reset_password_entity_1 = require("../entitites/reset-password/reset_password.entity");
 const repositoryProviders = [
     {
         provide: DITokens_enum_1.DITokensRepository.CUSTOMER_REPOSITORY,
@@ -36,6 +38,10 @@ const repositoryProviders = [
     {
         provide: DITokens_enum_1.DITokensRepository.LINKED_USERS_REPOSITORY,
         useClass: linked_users_repository_postgresql_1.LinkedUsersRepositoryPostgresql
+    },
+    {
+        provide: DITokens_enum_1.DITokensRepository.RESET_PASSWORD_REPOSITORY,
+        useClass: reset_password_repository_postgresql_1.ResetPasswordRepositoryPostgresql
     },
 ];
 let DBModule = class DBModule {
@@ -64,7 +70,8 @@ exports.DBModule = DBModule = __decorate([
                 activity_entity_1.Activity,
                 customer_activity_entity_1.CustomerActivity,
                 aux_linked_users_entity_1.AuxLinkedUsers,
-                linked_users_entity_1.LinkedUsers
+                linked_users_entity_1.LinkedUsers,
+                reset_password_entity_1.ResetPassword
             ]),
         ],
         providers: [...repositoryProviders],

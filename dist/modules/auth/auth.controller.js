@@ -25,8 +25,8 @@ let AuthController = class AuthController {
         const authReponse = await this.authService.signIn(auth);
         return authReponse;
     }
-    async resetPassword(body, req) {
-        await this.authService.resetPassword(body.email);
+    async recoverPassword(body, req) {
+        await this.authService.recoverPassword(body.email, `${req.ip}`);
         return req.ip;
     }
 };
@@ -39,14 +39,14 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "signIn", null);
 __decorate([
-    (0, common_1.Post)('password-reset'),
+    (0, common_1.Post)('recover-password'),
     (0, common_1.HttpCode)(common_1.HttpStatus.OK),
     __param(0, (0, common_1.Body)()),
     __param(1, (0, common_1.Req)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
-], AuthController.prototype, "resetPassword", null);
+], AuthController.prototype, "recoverPassword", null);
 exports.AuthController = AuthController = __decorate([
     (0, common_1.Controller)('auth'),
     __param(0, (0, common_1.Inject)(DITokens_enum_1.DITokensService.AUTH_SERVICE)),

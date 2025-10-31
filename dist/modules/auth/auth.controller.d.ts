@@ -6,5 +6,7 @@ export declare class AuthController {
     private readonly authService;
     constructor(authService: IAuthService);
     signIn(auth: AuthRequestDto): Promise<AuthResponseDto>;
-    resetPassword(body: Record<string, string>, req: Request): Promise<void | string>;
+    recoverPassword(body: {
+        email: string;
+    }, req: Request): Promise<void | string>;
 }
