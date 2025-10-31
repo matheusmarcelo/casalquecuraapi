@@ -8,6 +8,7 @@ import { ActivityModule } from './modules/activity/activity.module';
 import { CustomerActivityModule } from './modules/customer_activity/customer_activity.module';
 import { LinkedUsersModule } from './modules/linked_users/linked_users.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { MailerModule } from './modules/mailer/mailer.module';
 
 @Module({
   imports: [
@@ -17,7 +18,8 @@ import { AuthModule } from './modules/auth/auth.module';
     ActivityModule,
     CustomerActivityModule,
     LinkedUsersModule,
-    AuthModule
+    AuthModule,
+    MailerModule
   ],
   controllers: [AppController],
   providers: [AppService],
