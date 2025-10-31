@@ -3,6 +3,7 @@ export enum DITokensRepository {
     ACTIVITY_REPOSITORY = 'IActivityRepository',
     CUSTOMER_ACTIVITY_REPOSITORY = 'ICustomerActivityRepository',
     LINKED_USERS_REPOSITORY = 'ILinkedUsersRepository',
+    RESET_PASSWORD_REPOSITORY = 'IResetPasswordRepository',
 }
 
 export enum DITokensService {
