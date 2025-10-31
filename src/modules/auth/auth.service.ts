@@ -5,14 +5,14 @@ import { IAuthService } from 'src/constants/contracts/auth/IAuthService.contract
 import type { ICustomerService } from 'src/constants/contracts/customer/ICustomerService.contract';
 import { DITokensRepository, DITokensService } from 'src/constants/enums/DITokens/DITokens.enum';
 import { AuthRequestDto } from 'src/dtos/auth/authRequest.dto';
-import { compareSync as bcryptCompareSync } from 'bcrypt';
+import { compareSync as bcryptCompareSync, hashSync as bcryptHashSync } from 'bcrypt';
 import { AuthResponseDto } from 'src/dtos/auth/authResponse.dto';
 import { MailerService } from '../mailer/mailer.service';
 import { SendEmailDto } from 'src/dtos/mailer/mailer.dto';
 import { ResetPasswordDto } from 'src/dtos/reset_password/reset_password.dto';
 import { ResetPassword } from 'src/entitites/reset-password/reset_password.entity';
 import type { IResetPasswordRepository } from 'src/constants/contracts/reset-password/IResetPasswordRepository.contract';
-import { hashSync as bcryptHashSync } from 'bcrypt';
+import reset_password_tempalte from 'src/templates/reset_password.email';
 
 @Injectable()
 export class AuthService implements IAuthService {
@@ -63,7 +63,7 @@ export class AuthService implements IAuthService {
                 { name: customer.name, address: email }
             ],
             subject: 'Utilize o código para redefinir sua senha',
-            html: `<p><strong>token: ${token}</strong></p>, não compartilhe seu token`
+            html: reset_password_tempalte(customer.name.split(' ')[0], token),
         }
 
         const resetPassword: ResetPassword = {
@@ -76,21 +76,22 @@ export class AuthService implements IAuthService {
         return await this.mailerService.sendEmail(sendEmail);
     }
 
-    async validateTokenAsync(token: string): Promise<void> {
-        const tokenFound = await this.resetPasswordRepository.getRecoverPasswordAsync(token);
+    async validateTokenAsync(token: string, ipAddress: string): Promise<void> {
+        const tokenFound = await this.resetPasswordRepository.getRecoverPasswordAsync(token, ipAddress);
 
         if (!tokenFound) {
-            throw new HttpException('Token invalid', HttpStatus.NOT_FOUND);
+            throw new HttpException('Invalid token or the user is not the same person who requested the password recovery.', HttpStatus.UNAUTHORIZED);
         }
 
-        const now = Date.now();
-        const expiresIn = new Date(tokenFound.expiresIn!);
-
-        if (now > expiresIn.getTime() || tokenFound.validated) {
-            throw new HttpException('Token invalid', HttpStatus.NOT_FOUND);
+        if (tokenFound.validated) {
+            throw new HttpException('Token has already been used', HttpStatus.BAD_REQUEST);
         }
 
-        await this.resetPasswordRepository.validateTokenAsyncAsync(tokenFound.id!);
+        if (new Date() > tokenFound.expiresIn!) {
+            throw new HttpException('Token has expired', HttpStatus.GONE);
+        }
+
+        await this.resetPasswordRepository.validateTokenAsync(tokenFound.id!);
     }
 
     async resetPasswordAsync(resetPassword: ResetPasswordDto): Promise<void> {
@@ -98,6 +99,12 @@ export class AuthService implements IAuthService {
 
         if (!customer) {
             throw new HttpException('Customer not found', HttpStatus.NOT_FOUND);
+        }
+
+        const samePassword = bcryptCompareSync(resetPassword.password, customer!.password);
+
+        if (samePassword) {
+            throw new HttpException('This password is already in use', HttpStatus.BAD_REQUEST);
         }
 
         const saltOrRounds = 12;
