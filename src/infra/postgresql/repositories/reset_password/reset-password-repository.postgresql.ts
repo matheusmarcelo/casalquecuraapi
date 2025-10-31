@@ -17,11 +17,11 @@ export class ResetPasswordRepositoryPostgresql implements IResetPasswordReposito
         await this.resetPasswordRepository.save(resetPassword);
     }
 
-    async getRecoverPasswordAsync(token: string): Promise<ResetPassword | null> {
-        return await this.resetPasswordRepository.findOne({ where: { token, validated: false } });
+    async getRecoverPasswordAsync(token: string, ipAddress: string): Promise<ResetPassword | null> {
+        return await this.resetPasswordRepository.findOne({ where: { token, ipAddress, validated: false } });
     }
 
-    async validateTokenAsyncAsync(id: string): Promise<void> {
+    async validateTokenAsync(id: string): Promise<void> {
         await this.resetPasswordRepository.update(id, { validated: true });
     }
 }
