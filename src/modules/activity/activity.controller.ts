@@ -3,7 +3,10 @@ import type { IActivityService } from 'src/constants/contracts/activity/IActivit
 import { DITokensService } from 'src/constants/enums/DITokens/DITokens.enum';
 import { ActivityDto } from 'src/dtos/activity/activity.dto';
 import { FindActivitiesDto } from 'src/dtos/activity/findActivities.dto';
+import { DalyActivitiesDto } from 'src/dtos/daly_activities/daly_activities.dto';
 import { Activity } from 'src/entitites/activity/activity.entity';
+import { DalyActivities } from 'src/entitites/daly-activities/daly_activities.entity';
+import { MonthActivities } from 'src/entitites/mont-activities/month_activities.entity';
 import { AdminGuard } from 'src/guards/admin/admin.guard';
 import { AuthGuard } from 'src/guards/auth/auth.guard';
 
@@ -45,5 +48,26 @@ export class ActivityController {
   @UseGuards(AuthGuard, AdminGuard)
   async deleteActivitiesAsync(@Param('id') id: string): Promise<void> {
     await this.activityService.deleteActivityAsync(id);
+  }
+
+  @Post('completed')
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(AuthGuard)
+  async markActivityCompletedAsync(@Body() dalyActivityDto: DalyActivitiesDto): Promise<void> {
+    await this.activityService.markActivityCompletedAsync(dalyActivityDto);
+  }
+
+  @Get('daly/:customerId')
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(AuthGuard)
+  async getDalyActivitiesAsync(@Param('customerId') customerId: string): Promise<DalyActivities[]> {
+    return this.activityService.getDalyActivitiesAsync(customerId);
+  }
+
+  @Get('monthly/:customerId')
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(AuthGuard)
+  async getMonthlyActivitiesAsync(@Param('customerId') customerId: string): Promise<MonthActivities[]> {
+    return this.activityService.getMonthlyActivitiesAsync(customerId);
   }
 }

@@ -16,8 +16,8 @@ export class MonthActivitiesRepositoryPostgresql implements IMonthActivitiesRepo
         await this.monthActivityRepository.save(entity);
     }
 
-    async updateMonthActivityAsync(id: string, entity: MonthActivities): Promise<void> {
-        await this.monthActivityRepository.update(id, entity);
+    async updateMonthActivityAsync(id: string, totalScore: number): Promise<void> {
+        await this.monthActivityRepository.update(id, { totalScore });
     }
 
     async getMonthActivityAsync(customerId: string, month: number, year: number): Promise<MonthActivities | null> {
@@ -30,7 +30,7 @@ export class MonthActivitiesRepositoryPostgresql implements IMonthActivitiesRepo
         });
     }
 
-    async getMonthActivitiesAsync(customerId: string): Promise<MonthActivities[]> {
+    async getMonthlyActivitiesAsync(customerId: string): Promise<MonthActivities[]> {
         return await this.monthActivityRepository.find({ where: { user: { id: customerId } } });
     }
 }

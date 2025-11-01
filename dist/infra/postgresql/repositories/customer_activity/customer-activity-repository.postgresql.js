@@ -30,13 +30,18 @@ let CustomerActivityRepositoryPostgresql = class CustomerActivityRepositoryPostg
         return customerActivity;
     }
     async getCustomerActivitiesAsync(customerId) {
-        const customerActivities = await this.customerActivityRepository.find({
-            where: {
-                customer: { id: customerId },
-            },
-            relations: ['activity']
-        });
-        return customerActivities;
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        return await this.customerActivityRepository
+            .createQueryBuilder('ca')
+            .leftJoinAndSelect('ca.activity', 'activity')
+            .leftJoin('daly_activities', 'da', 'da.activity_id = activity.id AND da.user_id = :userId AND DATE(da.completion_date) = DATE(:today)', { userId: customerId, today })
+            .where('(ca.user_id = :customerId OR activity.isGeneral = :isGeneral)', {
+            customerId,
+            isGeneral: true
+        })
+            .andWhere('da.id IS NULL')
+            .getMany();
     }
     async getCustomerActivitiesByActivityIdAsync(activityId) {
         const customerActivities = await this.customerActivityRepository.find({

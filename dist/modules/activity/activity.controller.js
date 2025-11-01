@@ -17,6 +17,7 @@ const common_1 = require("@nestjs/common");
 const DITokens_enum_1 = require("../../constants/enums/DITokens/DITokens.enum");
 const activity_dto_1 = require("../../dtos/activity/activity.dto");
 const findActivities_dto_1 = require("../../dtos/activity/findActivities.dto");
+const daly_activities_dto_1 = require("../../dtos/daly_activities/daly_activities.dto");
 const admin_guard_1 = require("../../guards/admin/admin.guard");
 const auth_guard_1 = require("../../guards/auth/auth.guard");
 let ActivityController = class ActivityController {
@@ -40,6 +41,15 @@ let ActivityController = class ActivityController {
     }
     async deleteActivitiesAsync(id) {
         await this.activityService.deleteActivityAsync(id);
+    }
+    async markActivityCompletedAsync(dalyActivityDto) {
+        await this.activityService.markActivityCompletedAsync(dalyActivityDto);
+    }
+    async getDalyActivitiesAsync(customerId) {
+        return this.activityService.getDalyActivitiesAsync(customerId);
+    }
+    async getMonthlyActivitiesAsync(customerId) {
+        return this.activityService.getMonthlyActivitiesAsync(customerId);
     }
 };
 exports.ActivityController = ActivityController;
@@ -85,6 +95,33 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], ActivityController.prototype, "deleteActivitiesAsync", null);
+__decorate([
+    (0, common_1.Post)('completed'),
+    (0, common_1.HttpCode)(common_1.HttpStatus.OK),
+    (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [daly_activities_dto_1.DalyActivitiesDto]),
+    __metadata("design:returntype", Promise)
+], ActivityController.prototype, "markActivityCompletedAsync", null);
+__decorate([
+    (0, common_1.Get)('daly/:customerId'),
+    (0, common_1.HttpCode)(common_1.HttpStatus.OK),
+    (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
+    __param(0, (0, common_1.Param)('customerId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], ActivityController.prototype, "getDalyActivitiesAsync", null);
+__decorate([
+    (0, common_1.Get)('monthly/:customerId'),
+    (0, common_1.HttpCode)(common_1.HttpStatus.OK),
+    (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
+    __param(0, (0, common_1.Param)('customerId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], ActivityController.prototype, "getMonthlyActivitiesAsync", null);
 exports.ActivityController = ActivityController = __decorate([
     (0, common_1.Controller)('activities'),
     __param(0, (0, common_1.Inject)(DITokens_enum_1.DITokensService.ACTIVITY_SERVICE)),

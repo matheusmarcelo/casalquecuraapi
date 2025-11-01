@@ -2,5 +2,5 @@ import { DalyActivities } from "src/entitites/daly-activities/daly_activities.en
 
 export interface IDalyActivitiesRepository {
     createDalyActivityAsync(entity: DalyActivities): Promise<void>;
-    getDalyActivitiesAsync(customerId: string, today: Date): Promise<DalyActivities[]>;
+    getDalyActivitiesAsync(customerId: string): Promise<DalyActivities[]>;
 }

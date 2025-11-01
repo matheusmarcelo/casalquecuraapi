@@ -2,10 +2,17 @@ import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import type { IActivityRepository } from 'src/constants/contracts/activity/IActivityRepository.contract';
 import { IActivityService } from 'src/constants/contracts/activity/IActivityService.contract';
 import type { ICustomerActivityRepository } from 'src/constants/contracts/customer-activity/ICustomerActivitiesRepository.contract';
+import type { IDalyActivitiesRepository } from 'src/constants/contracts/daly-activities/IDalyActivitiesRepository.contract';
+import type { IMonthActivitiesRepository } from 'src/constants/contracts/month-activities/IMonthActivitiesRepository.contract';
 import { DITokensRepository } from 'src/constants/enums/DITokens/DITokens.enum';
 import { ActivityDto } from 'src/dtos/activity/activity.dto';
 import { FindActivitiesDto } from 'src/dtos/activity/findActivities.dto';
+import { DalyActivitiesDto } from 'src/dtos/daly_activities/daly_activities.dto';
+import { MonthActivitiesDto } from 'src/dtos/month_activities/month_activities.dto';
 import { Activity } from 'src/entitites/activity/activity.entity';
+import { Customer } from 'src/entitites/customer/customer.entity';
+import { DalyActivities } from 'src/entitites/daly-activities/daly_activities.entity';
+import { MonthActivities } from 'src/entitites/mont-activities/month_activities.entity';
 
 @Injectable()
 export class ActivityService implements IActivityService {
@@ -15,8 +22,11 @@ export class ActivityService implements IActivityService {
         private readonly activityRepository: IActivityRepository,
         @Inject(DITokensRepository.CUSTOMER_ACTIVITY_REPOSITORY)
         private readonly customerActivityRepository: ICustomerActivityRepository,
+        @Inject(DITokensRepository.DALY_ACTIVITIES_REPOSITORY)
+        private readonly dalyActivityRepository: IDalyActivitiesRepository,
+        @Inject(DITokensRepository.MONTH_ACTIVITIES_REPOSITORY)
+        private readonly monthActivityRepository: IMonthActivitiesRepository,
     ) { }
-
     async createActivityAsync(activityDto: ActivityDto): Promise<void> {
         const activity: Activity = {
             title: activityDto.title,
@@ -93,5 +103,54 @@ export class ActivityService implements IActivityService {
         }
 
         await this.activityRepository.deleteActivityAsync(id);
+    }
+
+    async markActivityCompletedAsync(dalyActivityDto: DalyActivitiesDto): Promise<void> {
+        const activity = await this.getActivityAsync(dalyActivityDto.activityId);
+        const dalyActivity: DalyActivities = {
+            score: activity!.score,
+            activity: { id: dalyActivityDto.activityId } as Activity,
+            user: { id: dalyActivityDto.userId } as Customer,
+        }
+
+        await this.dalyActivityRepository.createDalyActivityAsync(dalyActivity);
+        await this.createOrUpdateMonthActivityAsync(dalyActivityDto.userId, activity!.score);
+    }
+
+    async getDalyActivitiesAsync(customerId: string): Promise<DalyActivities[]> {
+        const dalyActivities = await this.dalyActivityRepository.getDalyActivitiesAsync(customerId);
+        return dalyActivities
+    }
+
+    async getMonthlyActivitiesAsync(customerId: string): Promise<MonthActivities[]> {
+        return await this.monthActivityRepository.getMonthlyActivitiesAsync(customerId);
+    }
+
+    private async createOrUpdateMonthActivityAsync(customerId: string, activityScore: number): Promise<void> {
+        const { month, year } = this.getMonthAndYear();
+        const monthActivityFound = await this.monthActivityRepository.getMonthActivityAsync(customerId, month, year);
+
+        if (!monthActivityFound) {
+            const monthActivity: MonthActivities = {
+                month,
+                year,
+                totalScore: activityScore,
+                user: { id: customerId } as Customer
+            }
+
+            await this.monthActivityRepository.createMonthActivityAsync(monthActivity);
+        } else {
+            const totalScore = +monthActivityFound.totalScore;
+            monthActivityFound.totalScore = totalScore + +activityScore;
+            await this.monthActivityRepository.updateMonthActivityAsync(monthActivityFound.id!, monthActivityFound.totalScore);
+        }
+    }
+
+    private getMonthAndYear(): { month: number, year: number } {
+        const now = new Date();
+        const month = now.getMonth() + 1;
+        const year = now.getFullYear();
+
+        return { month, year };
     }
 }

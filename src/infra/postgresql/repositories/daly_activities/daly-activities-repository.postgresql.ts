@@ -17,11 +17,11 @@ export class DalyActivitiesRepositoryPostgresql implements IDalyActivitiesReposi
         await this.dalyActivityRepository.save(entity);
     }
 
-    async getDalyActivitiesAsync(customerId: string, today: Date): Promise<DalyActivities[]> {
+    async getDalyActivitiesAsync(customerId: string): Promise<DalyActivities[]> {
         return this.dalyActivityRepository.find({
             where: {
                 user: { id: customerId },
-                completionDate: today
+                completionDate: new Date()
             }
         })
     }

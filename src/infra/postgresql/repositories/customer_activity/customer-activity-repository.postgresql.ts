@@ -23,14 +23,24 @@ export class CustomerActivityRepositoryPostgresql implements ICustomerActivityRe
     }
 
     async getCustomerActivitiesAsync(customerId: string): Promise<CustomerActivity[]> {
-        const customerActivities = await this.customerActivityRepository.find({
-            where: {
-                customer: { id: customerId },
-            },
-            relations: ['activity']
-        });
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
 
-        return customerActivities;
+        return await this.customerActivityRepository
+            .createQueryBuilder('ca')
+            .leftJoinAndSelect('ca.activity', 'activity')
+            .leftJoin(
+                'daly_activities',
+                'da',
+                'da.activity_id = activity.id AND da.user_id = :userId AND DATE(da.completion_date) = DATE(:today)',
+                { userId: customerId, today }
+            )
+            .where('(ca.user_id = :customerId OR activity.isGeneral = :isGeneral)', {
+                customerId,
+                isGeneral: true
+            })
+            .andWhere('da.id IS NULL') // 👈 NÃO está no daly_activities hoje
+            .getMany();
     }
 
     async getCustomerActivitiesByActivityIdAsync(activityId: string): Promise<CustomerActivity[]> {

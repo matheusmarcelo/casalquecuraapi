@@ -18,9 +18,13 @@ const DITokens_enum_1 = require("../../constants/enums/DITokens/DITokens.enum");
 let ActivityService = class ActivityService {
     activityRepository;
     customerActivityRepository;
-    constructor(activityRepository, customerActivityRepository) {
+    dalyActivityRepository;
+    monthActivityRepository;
+    constructor(activityRepository, customerActivityRepository, dalyActivityRepository, monthActivityRepository) {
         this.activityRepository = activityRepository;
         this.customerActivityRepository = customerActivityRepository;
+        this.dalyActivityRepository = dalyActivityRepository;
+        this.monthActivityRepository = monthActivityRepository;
     }
     async createActivityAsync(activityDto) {
         const activity = {
@@ -80,12 +84,55 @@ let ActivityService = class ActivityService {
         }
         await this.activityRepository.deleteActivityAsync(id);
     }
+    async markActivityCompletedAsync(dalyActivityDto) {
+        const activity = await this.getActivityAsync(dalyActivityDto.activityId);
+        const dalyActivity = {
+            score: activity.score,
+            activity: { id: dalyActivityDto.activityId },
+            user: { id: dalyActivityDto.userId },
+        };
+        await this.dalyActivityRepository.createDalyActivityAsync(dalyActivity);
+        await this.createOrUpdateMonthActivityAsync(dalyActivityDto.userId, activity.score);
+    }
+    async getDalyActivitiesAsync(customerId) {
+        const dalyActivities = await this.dalyActivityRepository.getDalyActivitiesAsync(customerId);
+        return dalyActivities;
+    }
+    async getMonthlyActivitiesAsync(customerId) {
+        return await this.monthActivityRepository.getMonthlyActivitiesAsync(customerId);
+    }
+    async createOrUpdateMonthActivityAsync(customerId, activityScore) {
+        const { month, year } = this.getMonthAndYear();
+        const monthActivityFound = await this.monthActivityRepository.getMonthActivityAsync(customerId, month, year);
+        if (!monthActivityFound) {
+            const monthActivity = {
+                month,
+                year,
+                totalScore: activityScore,
+                user: { id: customerId }
+            };
+            await this.monthActivityRepository.createMonthActivityAsync(monthActivity);
+        }
+        else {
+            const totalScore = +monthActivityFound.totalScore;
+            monthActivityFound.totalScore = totalScore + +activityScore;
+            await this.monthActivityRepository.updateMonthActivityAsync(monthActivityFound.id, monthActivityFound.totalScore);
+        }
+    }
+    getMonthAndYear() {
+        const now = new Date();
+        const month = now.getMonth() + 1;
+        const year = now.getFullYear();
+        return { month, year };
+    }
 };
 exports.ActivityService = ActivityService;
 exports.ActivityService = ActivityService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, common_1.Inject)(DITokens_enum_1.DITokensRepository.ACTIVITY_REPOSITORY)),
     __param(1, (0, common_1.Inject)(DITokens_enum_1.DITokensRepository.CUSTOMER_ACTIVITY_REPOSITORY)),
-    __metadata("design:paramtypes", [Object, Object])
+    __param(2, (0, common_1.Inject)(DITokens_enum_1.DITokensRepository.DALY_ACTIVITIES_REPOSITORY)),
+    __param(3, (0, common_1.Inject)(DITokens_enum_1.DITokensRepository.MONTH_ACTIVITIES_REPOSITORY)),
+    __metadata("design:paramtypes", [Object, Object, Object, Object])
 ], ActivityService);
 //# sourceMappingURL=activity.service.js.map

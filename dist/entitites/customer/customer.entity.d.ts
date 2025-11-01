@@ -1,6 +1,7 @@
 import { CustomerActivity } from "../customer-activity/customer-activity.entity";
 import { AuxLinkedUsers } from "../linked-users/aux_linked_users.entity";
 import { LinkedUsers } from "../linked-users/linked_users.entity";
+import { DalyActivities } from "../daly-activities/daly_activities.entity";
 export declare class Customer {
     id?: string;
     generateId(): void;
@@ -24,4 +25,5 @@ export declare class Customer {
     user2?: LinkedUsers[];
     fromAuxLinkedUsers?: AuxLinkedUsers[];
     toAuxLinkedUsers?: AuxLinkedUsers[];
+    dalyActivities: DalyActivities[];
 }

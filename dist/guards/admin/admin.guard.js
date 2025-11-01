@@ -13,6 +13,7 @@ let AdminGuard = class AdminGuard {
     canActivate(context) {
         const request = context.switchToHttp().getRequest();
         const user = request.user;
+        console.log("user: ", user);
         if (user?.role !== userRole_enum_1.UserRoles.ADMIN) {
             throw new common_1.ForbiddenException('Access denied. Administrators only.');
         }

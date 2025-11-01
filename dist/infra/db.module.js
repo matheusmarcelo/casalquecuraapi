@@ -22,6 +22,10 @@ const aux_linked_users_entity_1 = require("../entitites/linked-users/aux_linked_
 const linked_users_entity_1 = require("../entitites/linked-users/linked_users.entity");
 const reset_password_repository_postgresql_1 = require("./postgresql/repositories/reset_password/reset-password-repository.postgresql");
 const reset_password_entity_1 = require("../entitites/reset-password/reset_password.entity");
+const daly_activities_repository_postgresql_1 = require("./postgresql/repositories/daly_activities/daly-activities-repository.postgresql");
+const month_activities_repository_postgresql_1 = require("./postgresql/repositories/month_activities/month-activities-repository.postgresql");
+const daly_activities_entity_1 = require("../entitites/daly-activities/daly_activities.entity");
+const month_activities_entity_1 = require("../entitites/mont-activities/month_activities.entity");
 const repositoryProviders = [
     {
         provide: DITokens_enum_1.DITokensRepository.CUSTOMER_REPOSITORY,
@@ -42,6 +46,14 @@ const repositoryProviders = [
     {
         provide: DITokens_enum_1.DITokensRepository.RESET_PASSWORD_REPOSITORY,
         useClass: reset_password_repository_postgresql_1.ResetPasswordRepositoryPostgresql
+    },
+    {
+        provide: DITokens_enum_1.DITokensRepository.DALY_ACTIVITIES_REPOSITORY,
+        useClass: daly_activities_repository_postgresql_1.DalyActivitiesRepositoryPostgresql
+    },
+    {
+        provide: DITokens_enum_1.DITokensRepository.MONTH_ACTIVITIES_REPOSITORY,
+        useClass: month_activities_repository_postgresql_1.MonthActivitiesRepositoryPostgresql
     },
 ];
 let DBModule = class DBModule {
@@ -71,7 +83,9 @@ exports.DBModule = DBModule = __decorate([
                 customer_activity_entity_1.CustomerActivity,
                 aux_linked_users_entity_1.AuxLinkedUsers,
                 linked_users_entity_1.LinkedUsers,
-                reset_password_entity_1.ResetPassword
+                reset_password_entity_1.ResetPassword,
+                daly_activities_entity_1.DalyActivities,
+                month_activities_entity_1.MonthActivities
             ]),
         ],
         providers: [...repositoryProviders],

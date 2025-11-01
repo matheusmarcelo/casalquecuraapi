@@ -16,6 +16,7 @@ const customer_activity_entity_1 = require("../customer-activity/customer-activi
 const uuid_1 = require("uuid");
 const aux_linked_users_entity_1 = require("../linked-users/aux_linked_users.entity");
 const linked_users_entity_1 = require("../linked-users/linked_users.entity");
+const daly_activities_entity_1 = require("../daly-activities/daly_activities.entity");
 let Customer = class Customer {
     id;
     generateId() {
@@ -43,6 +44,7 @@ let Customer = class Customer {
     user2;
     fromAuxLinkedUsers;
     toAuxLinkedUsers;
+    dalyActivities;
 };
 exports.Customer = Customer;
 __decorate([
@@ -135,6 +137,10 @@ __decorate([
     (0, typeorm_1.OneToMany)(type => aux_linked_users_entity_1.AuxLinkedUsers, (auxLinkedUsers) => auxLinkedUsers.to),
     __metadata("design:type", Array)
 ], Customer.prototype, "toAuxLinkedUsers", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(type => daly_activities_entity_1.DalyActivities, (dalyActivities) => dalyActivities.id),
+    __metadata("design:type", Array)
+], Customer.prototype, "dalyActivities", void 0);
 exports.Customer = Customer = __decorate([
     (0, typeorm_1.Entity)({ name: 'users' })
 ], Customer);
