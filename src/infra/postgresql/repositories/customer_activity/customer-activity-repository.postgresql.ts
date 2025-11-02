@@ -1,7 +1,9 @@
 import { Global, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ICustomerActivityRepository } from 'src/constants/contracts/customer-activity/ICustomerActivitiesRepository.contract';
+import { Activity } from 'src/entitites/activity/activity.entity';
 import { CustomerActivity } from 'src/entitites/customer-activity/customer-activity.entity';
+import { DalyActivities } from 'src/entitites/daly-activities/daly_activities.entity';
 import { In, Repository } from 'typeorm';
 
 @Global()
@@ -10,7 +12,11 @@ export class CustomerActivityRepositoryPostgresql implements ICustomerActivityRe
 
     constructor(
         @InjectRepository(CustomerActivity)
-        private readonly customerActivityRepository: Repository<CustomerActivity>
+        private readonly customerActivityRepository: Repository<CustomerActivity>,
+        @InjectRepository(Activity)
+        private readonly activitiesRepository: Repository<Activity>,
+        @InjectRepository(DalyActivities)
+        private readonly dalyActivitiesRepository: Repository<DalyActivities>,
     ) { }
 
     async createCustomerActivityAsync(customer_activity: CustomerActivity): Promise<void> {
@@ -22,25 +28,54 @@ export class CustomerActivityRepositoryPostgresql implements ICustomerActivityRe
         return customerActivity;
     }
 
-    async getCustomerActivitiesAsync(customerId: string): Promise<CustomerActivity[]> {
+    async getCustomerActivitiesAsync(customerId: string): Promise<Activity[]> {
         const today = new Date();
         today.setHours(0, 0, 0, 0);
+        const response: Activity[] = [];
 
-        return await this.customerActivityRepository
-            .createQueryBuilder('ca')
-            .leftJoinAndSelect('ca.activity', 'activity')
-            .leftJoin(
-                'daly_activities',
-                'da',
-                'da.activity_id = activity.id AND da.user_id = :userId AND DATE(da.completion_date) = DATE(:today)',
-                { userId: customerId, today }
-            )
-            .where('(ca.user_id = :customerId OR activity.isGeneral = :isGeneral)', {
-                customerId,
-                isGeneral: true
-            })
-            .andWhere('da.id IS NULL') // 👈 NÃO está no daly_activities hoje
+        const activities = await this.activitiesRepository.find({
+            where: { isGeneral: true },
+        });
+
+        const customerActivities = await this.customerActivityRepository.find({
+            where: { customer: { id: customerId } },
+            relations: ['activity'],
+        });
+
+        const dalyActivities = await this.dalyActivitiesRepository
+            .createQueryBuilder('da')
+            .innerJoinAndSelect('da.activity', 'activity')
+            .where('CAST(da.completion_date AS date) = :today', { today })
+            .andWhere('da.user_id = :customerId', { customerId })
             .getMany();
+
+        const completedActivityIds = new Set(
+            dalyActivities.map((d) => d.activity.id)
+        );
+
+        const availableGeneralActivities = activities.filter(
+            (a) => !completedActivityIds.has(a.id)
+        );
+
+        const availableUserActivities = customerActivities.filter(
+            (ua) => !completedActivityIds.has(ua.activity.id)
+        );
+
+        const userActivities = availableUserActivities.map(x => x.activity);
+
+        userActivities.forEach(activity => {
+            const alreadyExists = availableGeneralActivities.some(a => a.id === activity.id);
+            if (!alreadyExists) {
+                availableGeneralActivities.push(activity);
+            }
+        });
+
+        // Juntar tudo
+        response.push(...availableGeneralActivities);
+
+        return response;
+
+
     }
 
     async getCustomerActivitiesByActivityIdAsync(activityId: string): Promise<CustomerActivity[]> {
@@ -71,9 +106,12 @@ export class CustomerActivityRepositoryPostgresql implements ICustomerActivityRe
         // 1. Busca todos os registros existentes de uma vez (1 query)
         const existingRecords = await this.customerActivityRepository
             .createQueryBuilder('ca')
+            .innerJoinAndSelect('ca.customer', 'customer')
             .where('ca.activity_id = :activityId', { activityId })
             .andWhere('ca.user_id IN (:...customerIds)', { customerIds })
             .getMany();
+
+        console.log(existingRecords);
 
         // 2. Cria um Set com os customer_ids que já existem (rápido para lookup)
         const existingCustomerIds = new Set(
