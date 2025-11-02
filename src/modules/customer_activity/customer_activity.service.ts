@@ -30,7 +30,7 @@ export class CustomerActivityService implements ICustomerActivityService {
         await this.customerActivityRepository.createCustomerActivityAsync(customerActivity);
     }
 
-    async getCustomerActivitiesAsync(customerId: string): Promise<CustomerActivity[]> {
+    async getCustomerActivitiesAsync(customerId: string): Promise<Activity[]> {
         const customerActivities = await this.customerActivityRepository.getCustomerActivitiesAsync(customerId);
         return customerActivities;
     }
