@@ -22,7 +22,7 @@ export class ActivityDto {
 
     @IsBoolean({ message: 'isGeneral must be a boolean type' })
     @IsOptional()
-    isGeneral: string;
+    isGeneral: boolean;
 
     @ValidateIf(o => o.isGeneral === false)
     @IsNotEmpty({ message: 'CustomerIds must be a value' })
