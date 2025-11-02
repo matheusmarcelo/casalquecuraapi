@@ -4,7 +4,7 @@ export declare class Activity {
     title: string;
     description: string;
     score: number;
-    isGeneral?: string;
+    isGeneral?: boolean;
     createdAt?: Date;
     updatedAt?: Date;
     activities?: CustomerActivity[];

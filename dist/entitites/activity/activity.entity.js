@@ -41,7 +41,7 @@ __decorate([
 ], Activity.prototype, "score", void 0);
 __decorate([
     (0, typeorm_1.Column)({ type: 'bit', default: true }),
-    __metadata("design:type", String)
+    __metadata("design:type", Boolean)
 ], Activity.prototype, "isGeneral", void 0);
 __decorate([
     (0, typeorm_1.CreateDateColumn)({ type: 'timestamp' }),

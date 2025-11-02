@@ -44,7 +44,7 @@ __decorate([
 __decorate([
     (0, class_validator_1.IsBoolean)({ message: 'isGeneral must be a boolean type' }),
     (0, class_validator_1.IsOptional)(),
-    __metadata("design:type", String)
+    __metadata("design:type", Boolean)
 ], ActivityDto.prototype, "isGeneral", void 0);
 __decorate([
     (0, class_validator_1.ValidateIf)(o => o.isGeneral === false),
