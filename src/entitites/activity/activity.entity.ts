@@ -16,7 +16,7 @@ export class Activity {
     score: number;
 
     @Column({ type: 'bit', default: true })
-    isGeneral?: string;
+    isGeneral?: boolean;
 
     @CreateDateColumn({ type: 'timestamp' })
     createdAt?: Date;
