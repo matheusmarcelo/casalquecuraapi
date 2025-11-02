@@ -78,6 +78,7 @@ export class Customer {
     @OneToMany(type => AuxLinkedUsers, (auxLinkedUsers) => auxLinkedUsers.to)
     toAuxLinkedUsers?: AuxLinkedUsers[];
 
+    // daly relationship
     @OneToMany(type => DalyActivities, (dalyActivities) => dalyActivities.id)
     dalyActivities: DalyActivities[];
 }
