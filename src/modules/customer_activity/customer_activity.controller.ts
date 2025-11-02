@@ -2,6 +2,7 @@ import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Inject, Param, Pos
 import type { ICustomerActivityService } from 'src/constants/contracts/customer-activity/ICustomerActivitiesService.contract';
 import { DITokensService } from 'src/constants/enums/DITokens/DITokens.enum';
 import { CustomerActivityDto } from 'src/dtos/customer_activity/customerActivity.dto';
+import { Activity } from 'src/entitites/activity/activity.entity';
 import { CustomerActivity } from 'src/entitites/customer-activity/customer-activity.entity';
 import { AdminGuard } from 'src/guards/admin/admin.guard';
 import { AuthGuard } from 'src/guards/auth/auth.guard';
@@ -21,7 +22,7 @@ export class CustomerActivityController {
 
   @Get('/:customerId')
   @UseGuards(AuthGuard)
-  async getCustomerActivitiesAsync(@Param('customerId') customerId: string): Promise<CustomerActivity[]> {
+  async getCustomerActivitiesAsync(@Param('customerId') customerId: string): Promise<Activity[]> {
     const customerActivities = await this.customerActivityService.getCustomerActivitiesAsync(customerId);
     return customerActivities;
   }
