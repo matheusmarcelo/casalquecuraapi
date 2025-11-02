@@ -111,8 +111,6 @@ export class CustomerActivityRepositoryPostgresql implements ICustomerActivityRe
             .andWhere('ca.user_id IN (:...customerIds)', { customerIds })
             .getMany();
 
-        console.log(existingRecords);
-
         // 2. Cria um Set com os customer_ids que já existem (rápido para lookup)
         const existingCustomerIds = new Set(
             existingRecords.map(record => record.customer.id),
