@@ -14,6 +14,7 @@ export class AuthController {
   ) { }
 
   @Post('')
+  @HttpCode(HttpStatus.OK)
   async signIn(@Body() auth: AuthRequestDto): Promise<AuthResponseDto> {
     const authReponse = await this.authService.signIn(auth);
     return authReponse;
