@@ -55,7 +55,7 @@ export class CustomerRepositoryPostgresql implements ICustomerRepository {
     }
 
     async getCustomerByEmail(email: string): Promise<Customer | null> {
-        const customer = await this.customerRepository.findOne({ where: { email } });
+        const customer = await this.customerRepository.findOne({ where: { email: ILike(email) } });
 
         return customer;
     }
