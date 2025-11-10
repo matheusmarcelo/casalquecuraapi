@@ -91,7 +91,6 @@ let CustomerActivityRepositoryPostgresql = class CustomerActivityRepositoryPostg
             .where('ca.activity_id = :activityId', { activityId })
             .andWhere('ca.user_id IN (:...customerIds)', { customerIds })
             .getMany();
-        console.log(existingRecords);
         const existingCustomerIds = new Set(existingRecords.map(record => record.customer.id));
         const newCustomerIds = customerIds.filter(id => !existingCustomerIds.has(id));
         if (newCustomerIds.length > 0) {

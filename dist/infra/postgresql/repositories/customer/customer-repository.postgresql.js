@@ -52,7 +52,7 @@ let CustomerRepositoryPostgresql = class CustomerRepositoryPostgresql {
         await this.customerRepository.update(id, { isActive: false });
     }
     async getCustomerByEmail(email) {
-        const customer = await this.customerRepository.findOne({ where: { email } });
+        const customer = await this.customerRepository.findOne({ where: { email: (0, typeorm_2.ILike)(email) } });
         return customer;
     }
 };
