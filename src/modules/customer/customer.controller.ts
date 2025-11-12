@@ -17,7 +17,6 @@ export class CustomerController {
 
     @Post('')
     @HttpCode(HttpStatus.CREATED)
-    @UseGuards(AuthGuard)
     async createCustomerAsync(@Body() customer: CustomerDto): Promise<void> {
         await this.customerService.createCustomerAsync(customer);
     }
