@@ -97,7 +97,7 @@ let AuthService = class AuthService {
             throw new common_1.HttpException('This password is already in use', common_1.HttpStatus.BAD_REQUEST);
         }
         const saltOrRounds = 12;
-        customer.password = (0, bcrypt_1.hashSync)(customer.password, saltOrRounds);
+        customer.password = (0, bcrypt_1.hashSync)(resetPassword.password, saltOrRounds);
         await this.customerService.updateCustomerAsync(customer.id, customer);
     }
     generateToken() {
