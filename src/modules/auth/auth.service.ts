@@ -108,7 +108,7 @@ export class AuthService implements IAuthService {
         }
 
         const saltOrRounds = 12;
-        customer.password = bcryptHashSync(customer.password, saltOrRounds);
+        customer.password = bcryptHashSync(resetPassword.password, saltOrRounds);
 
         await this.customerService.updateCustomerAsync(customer.id!, customer);
     }
