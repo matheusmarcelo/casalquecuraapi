@@ -47,7 +47,6 @@ exports.CustomerController = CustomerController;
 __decorate([
     (0, common_1.Post)(''),
     (0, common_1.HttpCode)(common_1.HttpStatus.CREATED),
-    (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [customer_dto_1.CustomerDto]),
