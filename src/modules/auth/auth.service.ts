@@ -41,7 +41,7 @@ export class AuthService implements IAuthService {
         return {
             access_token: token,
             user_role: customer!.role as string,
-            expiresIn: +this.configService.get<number>('JWT_EXPIRATION_TIME')!,
+            expiresIn: Date.now() + +this.configService.get<number>('JWT_EXPIRATION_TIME')! * 1000,
             userId: customer!.id,
         }
     }
