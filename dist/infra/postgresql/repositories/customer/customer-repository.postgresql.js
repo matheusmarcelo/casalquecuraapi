@@ -26,7 +26,12 @@ let CustomerRepositoryPostgresql = class CustomerRepositoryPostgresql {
         await this.customerRepository.save(customer);
     }
     async getCustomerByIdAsync(id) {
-        return await this.customerRepository.findOne({ where: { id } });
+        return await this.customerRepository.findOne({
+            where: {
+                id
+            },
+            select: ['name', 'email', 'date_of_birth', 'phone', 'gender', 'description', 'updatedAt', 'createdAt']
+        });
     }
     async getCustomersAsync(params) {
         const searchParams = {};

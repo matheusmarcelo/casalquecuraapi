@@ -46,7 +46,7 @@ let AuthService = class AuthService {
         return {
             access_token: token,
             user_role: customer.role,
-            expiresIn: +this.configService.get('JWT_EXPIRATION_TIME'),
+            expiresIn: Date.now() + +this.configService.get('JWT_EXPIRATION_TIME') * 1000,
             userId: customer.id,
         };
     }
