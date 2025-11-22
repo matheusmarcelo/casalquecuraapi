@@ -19,7 +19,12 @@ export class CustomerRepositoryPostgresql implements ICustomerRepository {
     }
 
     async getCustomerByIdAsync(id: string): Promise<Customer | null> {
-        return await this.customerRepository.findOne({ where: { id } });
+        return await this.customerRepository.findOne({
+            where: {
+                id
+            },
+            select: ['name', 'email', 'phone', 'gender', 'description', 'updatedAt', 'createdAt']
+        });
     }
 
     async getCustomersAsync(params: FindCustomersDto): Promise<Customer[]> {
