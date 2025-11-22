@@ -23,7 +23,7 @@ export class CustomerRepositoryPostgresql implements ICustomerRepository {
             where: {
                 id
             },
-            select: ['name', 'email', 'phone', 'gender', 'description', 'updatedAt', 'createdAt']
+            select: ['name', 'email', 'date_of_birth', 'phone', 'gender', 'description', 'updatedAt', 'createdAt']
         });
     }
 
