@@ -44,7 +44,8 @@ export class LinkedUsersRepositoryPostgresql implements ILinkedUsersRepository {
                 expirateAt: true,
                 from: {
                     id: true,
-                    name: true
+                    name: true,
+                    email: true,
                 },
                 to: {
                     name: true,
@@ -56,7 +57,9 @@ export class LinkedUsersRepositoryPostgresql implements ILinkedUsersRepository {
         if (!response) return null;
 
         const isRequester = response.from.id === customerId;
-        return this.mapAuxLinkedUserToLinkedUserDto(response, isRequester);
+        const mapUsers = this.mapAuxLinkedUserToLinkedUserDto(response, isRequester);
+        delete mapUsers.from?.id;
+        return mapUsers;
     }
 
     async getLinkedUsersSolicitationAsync(id: string): Promise<AuxLinkedUsers | null> {
@@ -100,6 +103,8 @@ export class LinkedUsersRepositoryPostgresql implements ILinkedUsersRepository {
             emailReceiver: linkedUser.to.email,
             isRequester: isRequester,
             expirateAt: linkedUser.expirateAt,
+            from: linkedUser.from,
+            to: linkedUser.to,
         };
     }
 }
