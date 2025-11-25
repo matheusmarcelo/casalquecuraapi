@@ -1,4 +1,5 @@
 import { IsBoolean, IsNotEmpty, IsString } from "class-validator";
+import { Customer } from "src/entitites/customer/customer.entity";
 
 export class LinkedUsersDto {
     @IsString({ message: 'The requester id must be string type' })
@@ -14,4 +15,7 @@ export class LinkedUsersDto {
     id?: string;
 
     expirateAt?: Date;
+
+    from?: Customer;
+    to?: Customer;
 }
