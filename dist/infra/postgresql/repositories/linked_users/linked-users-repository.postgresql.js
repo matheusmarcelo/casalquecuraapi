@@ -49,7 +49,8 @@ let LinkedUsersRepositoryPostgresql = class LinkedUsersRepositoryPostgresql {
                 expirateAt: true,
                 from: {
                     id: true,
-                    name: true
+                    name: true,
+                    email: true,
                 },
                 to: {
                     name: true,
@@ -60,7 +61,9 @@ let LinkedUsersRepositoryPostgresql = class LinkedUsersRepositoryPostgresql {
         if (!response)
             return null;
         const isRequester = response.from.id === customerId;
-        return this.mapAuxLinkedUserToLinkedUserDto(response, isRequester);
+        const mapUsers = this.mapAuxLinkedUserToLinkedUserDto(response, isRequester);
+        delete mapUsers.from?.id;
+        return mapUsers;
     }
     async getLinkedUsersSolicitationAsync(id) {
         const solicitation = await this.auxLinkedUsersRepository.findOne({ where: { id }, relations: ['from', 'to'] });
@@ -100,6 +103,8 @@ let LinkedUsersRepositoryPostgresql = class LinkedUsersRepositoryPostgresql {
             emailReceiver: linkedUser.to.email,
             isRequester: isRequester,
             expirateAt: linkedUser.expirateAt,
+            from: linkedUser.from,
+            to: linkedUser.to,
         };
     }
 };

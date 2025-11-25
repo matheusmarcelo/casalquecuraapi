@@ -17,6 +17,8 @@ class LinkedUsersDto {
     isRequester;
     id;
     expirateAt;
+    from;
+    to;
 }
 exports.LinkedUsersDto = LinkedUsersDto;
 __decorate([
