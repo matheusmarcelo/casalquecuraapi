@@ -1,5 +1,6 @@
 import { BadRequestException, Body, Controller, Delete, Get, HttpCode, HttpException, HttpStatus, Inject, InternalServerErrorException, Param, Post, Put, Query, UseGuards } from '@nestjs/common';
 import type { IActivityService } from 'src/constants/contracts/activity/IActivityService.contract';
+import { ChartReportInterval } from 'src/constants/enums/chartReport/chartReport.enum';
 import { DITokensService } from 'src/constants/enums/DITokens/DITokens.enum';
 import { ActivityDto } from 'src/dtos/activity/activity.dto';
 import { FindActivitiesDto } from 'src/dtos/activity/findActivities.dto';
@@ -69,5 +70,20 @@ export class ActivityController {
   @UseGuards(AuthGuard)
   async getMonthlyActivitiesAsync(@Param('customerId') customerId: string): Promise<MonthActivities[]> {
     return this.activityService.getMonthlyActivitiesAsync(customerId);
+  }
+
+  @Get('report/:customerId/chart')
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(AuthGuard)
+  async getCustomerReportAsync(@Param('customerId') customerId: string, @Query('days') days: string = '7'): Promise<any> {
+    const daysNumber = parseInt(days);
+
+    if (!Object.values(ChartReportInterval).includes(daysNumber)) {
+      throw new BadRequestException(
+        `Invalid interval. Must be one of: ${Object.values(ChartReportInterval).join(', ')}`
+      );
+    }
+
+    return await this.activityService.getCustomerReportAsync(customerId, daysNumber);
   }
 }
