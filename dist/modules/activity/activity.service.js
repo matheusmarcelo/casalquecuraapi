@@ -101,6 +101,22 @@ let ActivityService = class ActivityService {
     async getMonthlyActivitiesAsync(customerId) {
         return await this.monthActivityRepository.getMonthlyActivitiesAsync(customerId);
     }
+    async getCustomerReportAsync(customerId, days) {
+        const [totalWeek, totalMonth, chartReport, totalDone, totalPoints] = await Promise.all([
+            this.dalyActivityRepository.getTotalActivitiesWeekAsync(customerId),
+            this.monthActivityRepository.getTotalMonthActivitiesAsync(customerId),
+            this.dalyActivityRepository.getChartData(customerId, days),
+            this.dalyActivityRepository.getCustomerTotalActivitiesDoneAsync(customerId),
+            this.dalyActivityRepository.getCustomerTotalPointsAsync(customerId),
+        ]);
+        return {
+            totalWeek,
+            totalMonth,
+            totalDone,
+            totalPoints,
+            chartReport,
+        };
+    }
     async createOrUpdateMonthActivityAsync(customerId, activityScore) {
         const { month, year } = this.getMonthAndYear();
         const monthActivityFound = await this.monthActivityRepository.getMonthActivityAsync(customerId, month, year);

@@ -3,8 +3,10 @@ import { IActivityService } from 'src/constants/contracts/activity/IActivityServ
 import type { ICustomerActivityRepository } from 'src/constants/contracts/customer-activity/ICustomerActivitiesRepository.contract';
 import type { IDalyActivitiesRepository } from 'src/constants/contracts/daly-activities/IDalyActivitiesRepository.contract';
 import type { IMonthActivitiesRepository } from 'src/constants/contracts/month-activities/IMonthActivitiesRepository.contract';
+import { ChartReportInterval } from 'src/constants/enums/chartReport/chartReport.enum';
 import { ActivityDto } from 'src/dtos/activity/activity.dto';
 import { FindActivitiesDto } from 'src/dtos/activity/findActivities.dto';
+import { ReportDto } from 'src/dtos/chart_report/chart_report.dto';
 import { DalyActivitiesDto } from 'src/dtos/daly_activities/daly_activities.dto';
 import { Activity } from 'src/entitites/activity/activity.entity';
 import { DalyActivities } from 'src/entitites/daly-activities/daly_activities.entity';
@@ -23,6 +25,7 @@ export declare class ActivityService implements IActivityService {
     markActivityCompletedAsync(dalyActivityDto: DalyActivitiesDto): Promise<void>;
     getDalyActivitiesAsync(customerId: string): Promise<DalyActivities[]>;
     getMonthlyActivitiesAsync(customerId: string): Promise<MonthActivities[]>;
+    getCustomerReportAsync(customerId: string, days: ChartReportInterval): Promise<ReportDto>;
     private createOrUpdateMonthActivityAsync;
     private getMonthAndYear;
 }

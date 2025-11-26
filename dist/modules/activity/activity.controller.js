@@ -14,6 +14,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ActivityController = void 0;
 const common_1 = require("@nestjs/common");
+const chartReport_enum_1 = require("../../constants/enums/chartReport/chartReport.enum");
 const DITokens_enum_1 = require("../../constants/enums/DITokens/DITokens.enum");
 const activity_dto_1 = require("../../dtos/activity/activity.dto");
 const findActivities_dto_1 = require("../../dtos/activity/findActivities.dto");
@@ -50,6 +51,13 @@ let ActivityController = class ActivityController {
     }
     async getMonthlyActivitiesAsync(customerId) {
         return this.activityService.getMonthlyActivitiesAsync(customerId);
+    }
+    async getCustomerReportAsync(customerId, days = '7') {
+        const daysNumber = parseInt(days);
+        if (!Object.values(chartReport_enum_1.ChartReportInterval).includes(daysNumber)) {
+            throw new common_1.BadRequestException(`Invalid interval. Must be one of: ${Object.values(chartReport_enum_1.ChartReportInterval).join(', ')}`);
+        }
+        return await this.activityService.getCustomerReportAsync(customerId, daysNumber);
     }
 };
 exports.ActivityController = ActivityController;
@@ -122,6 +130,16 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], ActivityController.prototype, "getMonthlyActivitiesAsync", null);
+__decorate([
+    (0, common_1.Get)('report/:customerId/chart'),
+    (0, common_1.HttpCode)(common_1.HttpStatus.OK),
+    (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
+    __param(0, (0, common_1.Param)('customerId')),
+    __param(1, (0, common_1.Query)('days')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String]),
+    __metadata("design:returntype", Promise)
+], ActivityController.prototype, "getCustomerReportAsync", null);
 exports.ActivityController = ActivityController = __decorate([
     (0, common_1.Controller)('activities'),
     __param(0, (0, common_1.Inject)(DITokens_enum_1.DITokensService.ACTIVITY_SERVICE)),

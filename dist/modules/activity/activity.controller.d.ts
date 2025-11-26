@@ -16,4 +16,5 @@ export declare class ActivityController {
     markActivityCompletedAsync(dalyActivityDto: DalyActivitiesDto): Promise<void>;
     getDalyActivitiesAsync(customerId: string): Promise<DalyActivities[]>;
     getMonthlyActivitiesAsync(customerId: string): Promise<MonthActivities[]>;
+    getCustomerReportAsync(customerId: string, days?: string): Promise<any>;
 }
