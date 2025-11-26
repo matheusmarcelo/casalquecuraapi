@@ -4,9 +4,11 @@ import { IActivityService } from 'src/constants/contracts/activity/IActivityServ
 import type { ICustomerActivityRepository } from 'src/constants/contracts/customer-activity/ICustomerActivitiesRepository.contract';
 import type { IDalyActivitiesRepository } from 'src/constants/contracts/daly-activities/IDalyActivitiesRepository.contract';
 import type { IMonthActivitiesRepository } from 'src/constants/contracts/month-activities/IMonthActivitiesRepository.contract';
+import { ChartReportInterval } from 'src/constants/enums/chartReport/chartReport.enum';
 import { DITokensRepository } from 'src/constants/enums/DITokens/DITokens.enum';
 import { ActivityDto } from 'src/dtos/activity/activity.dto';
 import { FindActivitiesDto } from 'src/dtos/activity/findActivities.dto';
+import { ReportDto } from 'src/dtos/chart_report/chart_report.dto';
 import { DalyActivitiesDto } from 'src/dtos/daly_activities/daly_activities.dto';
 import { MonthActivitiesDto } from 'src/dtos/month_activities/month_activities.dto';
 import { Activity } from 'src/entitites/activity/activity.entity';
@@ -124,6 +126,24 @@ export class ActivityService implements IActivityService {
 
     async getMonthlyActivitiesAsync(customerId: string): Promise<MonthActivities[]> {
         return await this.monthActivityRepository.getMonthlyActivitiesAsync(customerId);
+    }
+
+    async getCustomerReportAsync(customerId: string, days: ChartReportInterval): Promise<ReportDto> {
+        const [totalWeek, totalMonth, chartReport, totalDone, totalPoints] = await Promise.all([
+            this.dalyActivityRepository.getTotalActivitiesWeekAsync(customerId),
+            this.monthActivityRepository.getTotalMonthActivitiesAsync(customerId),
+            this.dalyActivityRepository.getChartData(customerId, days),
+            this.dalyActivityRepository.getCustomerTotalActivitiesDoneAsync(customerId),
+            this.dalyActivityRepository.getCustomerTotalPointsAsync(customerId),
+        ]);
+
+        return {
+            totalWeek,
+            totalMonth,
+            totalDone,
+            totalPoints,
+            chartReport,
+        }
     }
 
     private async createOrUpdateMonthActivityAsync(customerId: string, activityScore: number): Promise<void> {
