@@ -97,14 +97,20 @@ let DalyActivitiesRepositoryPostgresql = class DalyActivitiesRepositoryPostgresq
     groupByDays(dataPoints, groupSize, totalDays) {
         const result = [];
         const today = new Date();
-        for (let i = totalDays - 1; i >= 0; i -= groupSize) {
+        const numberOfGroups = 5;
+        const daysPerGroup = 3;
+        for (let groupIndex = 0; groupIndex < numberOfGroups; groupIndex++) {
             let totalPoints = 0;
             let maxPointsInPeriod = 0;
+            const groupStartOffset = (numberOfGroups * daysPerGroup) - 1 - (groupIndex * daysPerGroup);
             const startDate = new Date(today);
-            startDate.setDate(today.getDate() - i);
-            for (let j = 0; j < groupSize && (i - j) >= 0; j++) {
+            startDate.setDate(today.getDate() - groupStartOffset);
+            for (let j = 0; j < daysPerGroup; j++) {
+                const dayOffset = groupStartOffset - j;
+                if (dayOffset < 0)
+                    break;
                 const date = new Date(today);
-                date.setDate(today.getDate() - (i - j));
+                date.setDate(today.getDate() - dayOffset);
                 const dateStr = date.toISOString().split('T')[0];
                 const existing = dataPoints.find(d => d.date === dateStr);
                 if (existing) {
@@ -113,25 +119,27 @@ let DalyActivitiesRepositoryPostgresql = class DalyActivitiesRepositoryPostgresq
                     maxPointsInPeriod = Math.max(maxPointsInPeriod, dayPoints);
                 }
             }
+            const endDate = new Date(startDate);
+            endDate.setDate(startDate.getDate() + daysPerGroup - 1);
             result.push({
-                label: `${startDate.getDate()}/${startDate.getMonth() + 1}`,
+                label: `${startDate.getDate()}/${startDate.getMonth() + 1} - ${endDate.getDate()}/${endDate.getMonth() + 1}`,
                 points: totalPoints,
                 maxPoints: maxPointsInPeriod,
                 date: startDate.toISOString().split('T')[0]
             });
         }
-        return result;
+        return result.reverse();
     }
     groupByWeek(dataPoints, totalDays) {
         const result = [];
         const today = new Date();
         today.setHours(0, 0, 0, 0);
-        const numberOfWeeks = Math.ceil(totalDays / 7);
+        const numberOfWeeks = 5;
+        const daysPerWeek = 7;
         for (let weekIndex = 0; weekIndex < numberOfWeeks; weekIndex++) {
             let totalPoints = 0;
             let maxPointsInWeek = 0;
-            let minPointsInWeek = 0;
-            const weekStartOffset = totalDays - 1 - (weekIndex * 7);
+            const weekStartOffset = totalDays - 1 - (weekIndex * daysPerWeek);
             const startDate = new Date(today);
             startDate.setDate(today.getDate() - weekStartOffset);
             const endDate = new Date(startDate);
@@ -139,25 +147,27 @@ let DalyActivitiesRepositoryPostgresql = class DalyActivitiesRepositoryPostgresq
             if (endDate > today) {
                 endDate.setTime(today.getTime());
             }
-            for (let dayInWeek = 0; dayInWeek < 7; dayInWeek++) {
+            for (let dayInWeek = 0; dayInWeek < daysPerWeek; dayInWeek++) {
                 const dayOffset = weekStartOffset - dayInWeek;
                 if (dayOffset < 0)
                     break;
                 const date = new Date(today);
                 date.setDate(today.getDate() - dayOffset);
                 const dateStr = date.toISOString().split('T')[0];
-                const existing = dataPoints.find(d => d.date.toISOString().split('T')[0] === dateStr);
+                const existing = dataPoints.find(d => {
+                    const existingDateStr = d.date.toISOString ? d.date.toISOString().split('T')[0] : d.date;
+                    return existingDateStr === dateStr;
+                });
                 if (existing) {
                     const dayPoints = parseInt(existing.points);
                     totalPoints += dayPoints;
                     maxPointsInWeek = Math.max(maxPointsInWeek, dayPoints);
-                    minPointsInWeek = Math.min(minPointsInWeek, dayPoints);
                 }
             }
-            const startLabel = `${String(startDate.getDate()).padStart(2, '0')}/${String(startDate.getMonth() + 1).padStart(2, '0')}`;
-            const endLabel = `${String(endDate.getDate()).padStart(2, '0')}/${String(endDate.getMonth() + 1).padStart(2, '0')}`;
+            const monthNames = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
+            const label = `${startDate.getDate()}${monthNames[startDate.getMonth()]}\n${endDate.getDate()}${monthNames[endDate.getMonth()]}`;
             result.push({
-                label: `${startLabel} - ${endLabel}`,
+                label,
                 points: totalPoints,
                 maxPoints: maxPointsInWeek,
                 date: startDate.toISOString().split('T')[0]
