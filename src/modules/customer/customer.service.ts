@@ -29,7 +29,7 @@ export class CustomerService implements ICustomerService {
         const customer = await this.customerRepository.getCustomerByEmail(customerDto.email);
 
         if (customer) {
-            throw new HttpException('Customer alredy created', HttpStatus.BAD_REQUEST);
+            throw new HttpException('Customer alredy created', HttpStatus.CONFLICT);
         }
 
         const saltOrRounds = 12;
