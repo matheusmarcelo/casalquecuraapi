@@ -43,7 +43,7 @@ export class MonthActivitiesRepositoryPostgresql implements IMonthActivitiesRepo
             .where('activity.user_id = :userId', { userId: customerId })
             .andWhere(
                 `activity.completion_date BETWEEN 
-            date_trunc('month', CURRENT_DATE) AND CURRENT_DATE`
+            date_trunc('month', CURRENT_DATE) AND CURRENT_TIMESTAMP`
             )
             .getCount();
 
