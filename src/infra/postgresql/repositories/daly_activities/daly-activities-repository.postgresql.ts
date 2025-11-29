@@ -34,7 +34,7 @@ export class DalyActivitiesRepositoryPostgresql implements IDalyActivitiesReposi
             .where('activity.user_id = :userId', { userId: customerId })
             .andWhere(
                 `activity.completion_date BETWEEN 
-            date_trunc('week', CURRENT_DATE) AND CURRENT_DATE`
+            date_trunc('week', CURRENT_DATE) AND CURRENT_TIMESTAMP`
             )
             .getCount();
 
@@ -104,19 +104,19 @@ export class DalyActivitiesRepositoryPostgresql implements IDalyActivitiesReposi
     private groupByDays(dataPoints: any[], groupSize: number, totalDays: number): ChartDataPointDto[] {
         const result: ChartDataPointDto[] = [];
         const today = new Date();
-        const numberOfGroups = 5; // Sempre 5 colunas
-        const daysPerGroup = 3; // 3 dias por grupo = 15 dias total
+        const numberOfGroups = 5;
+        const daysPerGroup = 3;
 
         for (let groupIndex = 0; groupIndex < numberOfGroups; groupIndex++) {
             let totalPoints = 0;
             let maxPointsInPeriod = 0;
 
-            // Calcular o offset inicial para este grupo
+
             const groupStartOffset = (numberOfGroups * daysPerGroup) - 1 - (groupIndex * daysPerGroup);
             const startDate = new Date(today);
             startDate.setDate(today.getDate() - groupStartOffset);
 
-            // Somar os pontos de cada dia no grupo (3 dias)
+
             for (let j = 0; j < daysPerGroup; j++) {
                 const dayOffset = groupStartOffset - j;
                 if (dayOffset < 0) break;
@@ -152,14 +152,14 @@ export class DalyActivitiesRepositoryPostgresql implements IDalyActivitiesReposi
         const today = new Date();
         today.setHours(0, 0, 0, 0);
 
-        const numberOfWeeks = 5; // Sempre 5 colunas
+        const numberOfWeeks = 5;
         const daysPerWeek = 7;
 
         for (let weekIndex = 0; weekIndex < numberOfWeeks; weekIndex++) {
             let totalPoints = 0;
             let maxPointsInWeek = 0;
 
-            // Calcular offset da semana
+
             const weekStartOffset = totalDays - 1 - (weekIndex * daysPerWeek);
             const startDate = new Date(today);
             startDate.setDate(today.getDate() - weekStartOffset);
@@ -171,7 +171,7 @@ export class DalyActivitiesRepositoryPostgresql implements IDalyActivitiesReposi
                 endDate.setTime(today.getTime());
             }
 
-            // Iterar pelos 7 dias da semana
+
             for (let dayInWeek = 0; dayInWeek < daysPerWeek; dayInWeek++) {
                 const dayOffset = weekStartOffset - dayInWeek;
                 if (dayOffset < 0) break;
