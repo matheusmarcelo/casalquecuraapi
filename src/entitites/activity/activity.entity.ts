@@ -26,4 +26,6 @@ export class Activity {
 
     @OneToMany(type => CustomerActivity, (customer_activity) => customer_activity.activity)
     activities?: CustomerActivity[];
+
+    isLinkedUserActivity?: boolean;
 }
