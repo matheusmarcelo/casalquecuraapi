@@ -14,11 +14,12 @@ const class_validator_1 = require("class-validator");
 class DalyActivitiesDto {
     userId;
     activityId;
+    linked_users_id;
 }
 exports.DalyActivitiesDto = DalyActivitiesDto;
 __decorate([
     (0, class_validator_1.IsString)({ message: 'User id must be a string type' }),
-    (0, class_validator_1.IsNotEmpty)({ message: 'User id must have a value' }),
+    (0, class_validator_1.ValidateIf)((o) => !o.linked_users_id),
     __metadata("design:type", String)
 ], DalyActivitiesDto.prototype, "userId", void 0);
 __decorate([
@@ -26,4 +27,9 @@ __decorate([
     (0, class_validator_1.IsNotEmpty)({ message: 'Activity id must have a value' }),
     __metadata("design:type", String)
 ], DalyActivitiesDto.prototype, "activityId", void 0);
+__decorate([
+    (0, class_validator_1.ValidateIf)((o) => !o.userId),
+    (0, class_validator_1.IsString)({ message: 'Linked users id must be string type' }),
+    __metadata("design:type", String)
+], DalyActivitiesDto.prototype, "linked_users_id", void 0);
 //# sourceMappingURL=daly_activities.dto.js.map

@@ -17,6 +17,7 @@ const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const chartReport_enum_1 = require("../../../../constants/enums/chartReport/chartReport.enum");
 const daly_activities_entity_1 = require("../../../../entitites/daly-activities/daly_activities.entity");
+const numeric_helpers_1 = require("../../../../helpers/numeric.helpers");
 const typeorm_2 = require("typeorm");
 let DalyActivitiesRepositoryPostgresql = class DalyActivitiesRepositoryPostgresql {
     dalyActivityRepository;
@@ -26,49 +27,83 @@ let DalyActivitiesRepositoryPostgresql = class DalyActivitiesRepositoryPostgresq
     async createDalyActivityAsync(entity) {
         await this.dalyActivityRepository.save(entity);
     }
-    async getDalyActivitiesAsync(customerId) {
-        return this.dalyActivityRepository.find({
-            where: {
-                user: { id: customerId },
-                completionDate: new Date()
-            }
-        });
+    async getDalyActivitiesAsync(customerOrLinkedUserId) {
+        const isNumeric = new numeric_helpers_1.NumericHelper().isNumeric(customerOrLinkedUserId);
+        if (isNumeric) {
+            return this.dalyActivityRepository.find({
+                where: {
+                    linkedUserId: { id: customerOrLinkedUserId },
+                    completionDate: new Date()
+                }
+            });
+        }
+        else {
+            return this.dalyActivityRepository.find({
+                where: {
+                    user: { id: customerOrLinkedUserId },
+                    completionDate: new Date()
+                }
+            });
+        }
     }
-    async getTotalActivitiesWeekAsync(customerId) {
-        const totalActivity = await this.dalyActivityRepository
+    async getTotalActivitiesWeekAsync(customerOrLinkedUserId) {
+        const totalActivity = this.dalyActivityRepository
+            .createQueryBuilder('activity');
+        const isNumeric = new numeric_helpers_1.NumericHelper().isNumeric(customerOrLinkedUserId);
+        if (isNumeric) {
+            totalActivity.where('activity.linked_user_id = :userId', { userId: customerOrLinkedUserId });
+        }
+        else {
+            totalActivity.where('activity.user_id = :userId', { userId: customerOrLinkedUserId });
+        }
+        const data = await totalActivity.andWhere(`activity.completion_date BETWEEN 
+            date_trunc('week', CURRENT_DATE) AND CURRENT_TIMESTAMP`).getCount();
+        return data || 0;
+    }
+    async getCustomerTotalActivitiesDoneAsync(customerOrLinkedUserId) {
+        const totalActivity = this.dalyActivityRepository
+            .createQueryBuilder('activity');
+        const isNumeric = new numeric_helpers_1.NumericHelper().isNumeric(customerOrLinkedUserId);
+        if (isNumeric) {
+            totalActivity.where('activity.linked_user_id = :userId', { userId: customerOrLinkedUserId });
+        }
+        else {
+            totalActivity.where('activity.user_id = :userId', { userId: customerOrLinkedUserId });
+        }
+        const data = await totalActivity.getCount();
+        return data || 0;
+    }
+    async getCustomerTotalPointsAsync(customerOrLinkedUserId) {
+        const isNumeric = new numeric_helpers_1.NumericHelper().isNumeric(customerOrLinkedUserId);
+        const result = this.dalyActivityRepository
             .createQueryBuilder('activity')
-            .where('activity.user_id = :userId', { userId: customerId })
-            .andWhere(`activity.completion_date BETWEEN 
-            date_trunc('week', CURRENT_DATE) AND CURRENT_TIMESTAMP`)
-            .getCount();
-        return totalActivity || 0;
+            .select('COALESCE(SUM(activity.score), 0)', 'totalPoints');
+        if (isNumeric) {
+            result.where('activity.linked_user_id = :userId', { userId: customerOrLinkedUserId });
+        }
+        else {
+            result.where('activity.user_id = :userId', { userId: customerOrLinkedUserId });
+        }
+        const data = await result.getRawOne();
+        return parseInt(data.totalPoints) || 0;
     }
-    async getCustomerTotalActivitiesDoneAsync(customerId) {
-        const totalActivity = await this.dalyActivityRepository
-            .createQueryBuilder('activity')
-            .where('activity.user_id = :userId', { userId: customerId })
-            .getCount();
-        return totalActivity || 0;
-    }
-    async getCustomerTotalPointsAsync(customerId) {
-        const result = await this.dalyActivityRepository
-            .createQueryBuilder('activity')
-            .select('COALESCE(SUM(activity.score), 0)', 'totalPoints')
-            .where('activity.user_id = :userId', { userId: customerId })
-            .getRawOne();
-        return parseInt(result?.totalPoints) || 0;
-    }
-    async getChartData(customerId, days) {
-        const dataPoints = await this.dalyActivityRepository
+    async getChartData(customerOrLinkedUserId, days) {
+        const isNumeric = new numeric_helpers_1.NumericHelper().isNumeric(customerOrLinkedUserId);
+        const dataPoints = this.dalyActivityRepository
             .createQueryBuilder('activity')
             .select('DATE(activity.completion_date)', 'date')
-            .addSelect('COALESCE(SUM(activity.score), 0)', 'points')
-            .where('activity.user_id = :userId', { userId: customerId })
-            .andWhere(`activity.completion_date >= CURRENT_DATE - INTERVAL '${days} days'`)
+            .addSelect('COALESCE(SUM(activity.score), 0)', 'points');
+        if (isNumeric) {
+            dataPoints.where('activity.linked_user_id = :userId', { userId: customerOrLinkedUserId });
+        }
+        else {
+            dataPoints.where('activity.user_id = :userId', { userId: customerOrLinkedUserId });
+        }
+        const result = await dataPoints.andWhere(`activity.completion_date >= CURRENT_DATE - INTERVAL '${days} days'`)
             .groupBy('DATE(activity.completion_date)')
             .orderBy('date', 'ASC')
             .getRawMany();
-        const groupedData = this.groupData(dataPoints, days);
+        const groupedData = this.groupData(result, days);
         const allMaxPoints = groupedData.map(d => d.maxPoints);
         console.log('\n\n\n\n\n', groupedData);
         return {

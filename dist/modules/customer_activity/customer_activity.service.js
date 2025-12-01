@@ -17,19 +17,38 @@ const common_1 = require("@nestjs/common");
 const DITokens_enum_1 = require("../../constants/enums/DITokens/DITokens.enum");
 let CustomerActivityService = class CustomerActivityService {
     customerActivityRepository;
-    constructor(customerActivityRepository) {
+    activityRepository;
+    constructor(customerActivityRepository, activityRepository) {
         this.customerActivityRepository = customerActivityRepository;
+        this.activityRepository = activityRepository;
     }
     async createCustomerActivityAsync(customer_activity) {
-        const customerActivityFound = await this.customerActivityRepository.getCustomerActivityByCustomerIdAndActivityIdAsync(customer_activity.customer_id, customer_activity.activity_id);
-        if (customerActivityFound) {
+        const customerActivityFound = await this.customerActivityRepository.getCustomerActivityByCustomerIdAndActivityIdAsync(customer_activity.activity_id, customer_activity.customer_id);
+        const linkedUsersActivityFound = await this.customerActivityRepository.getCustomerActivityByLinkedUserIdAndActivityIdAsync(customer_activity.activity_id, customer_activity.linked_users_id);
+        const activity = await this.activityRepository.getActivityAsync(customer_activity.activity_id);
+        if (!activity) {
+            throw new common_1.HttpException('Activity not found', common_1.HttpStatus.NOT_FOUND);
+        }
+        if (customerActivityFound || linkedUsersActivityFound) {
             throw new common_1.HttpException('This activity has already been associated with this customer', common_1.HttpStatus.BAD_REQUEST);
         }
         const customerActivity = {
-            customer: { id: customer_activity.customer_id },
             activity: { id: customer_activity.activity_id },
         };
+        if (customer_activity.customer_id) {
+            customerActivity.customer = { id: customer_activity.customer_id };
+        }
+        else if (customer_activity.linked_users_id) {
+            customerActivity.linkedUserId = { id: customer_activity.linked_users_id };
+        }
+        else {
+            throw new common_1.HttpException('You must infom any customer or linked user id', common_1.HttpStatus.BAD_REQUEST);
+        }
         await this.customerActivityRepository.createCustomerActivityAsync(customerActivity);
+        if (activity.isGeneral) {
+            activity.isGeneral = false;
+            await this.activityRepository.updateActivityAsync(activity.id, activity);
+        }
     }
     async getCustomerActivitiesAsync(customerId) {
         const customerActivities = await this.customerActivityRepository.getCustomerActivitiesAsync(customerId);
@@ -47,6 +66,7 @@ exports.CustomerActivityService = CustomerActivityService;
 exports.CustomerActivityService = CustomerActivityService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, common_1.Inject)(DITokens_enum_1.DITokensRepository.CUSTOMER_ACTIVITY_REPOSITORY)),
-    __metadata("design:paramtypes", [Object])
+    __param(1, (0, common_1.Inject)(DITokens_enum_1.DITokensRepository.ACTIVITY_REPOSITORY)),
+    __metadata("design:paramtypes", [Object, Object])
 ], CustomerActivityService);
 //# sourceMappingURL=customer_activity.service.js.map

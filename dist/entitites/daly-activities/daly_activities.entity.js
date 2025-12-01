@@ -13,12 +13,14 @@ exports.DalyActivities = void 0;
 const typeorm_1 = require("typeorm");
 const activity_entity_1 = require("../activity/activity.entity");
 const customer_entity_1 = require("../customer/customer.entity");
+const linked_users_entity_1 = require("../linked-users/linked_users.entity");
 let DalyActivities = class DalyActivities {
     id;
     user;
     activity;
     completionDate;
     score;
+    linkedUserId;
 };
 exports.DalyActivities = DalyActivities;
 __decorate([
@@ -43,6 +45,11 @@ __decorate([
     (0, typeorm_1.Column)({ type: 'decimal', nullable: false }),
     __metadata("design:type", Number)
 ], DalyActivities.prototype, "score", void 0);
+__decorate([
+    (0, typeorm_1.ManyToOne)(type => linked_users_entity_1.LinkedUsers, (linkedUsers) => linkedUsers.id),
+    (0, typeorm_1.JoinColumn)({ name: 'linked_user_id' }),
+    __metadata("design:type", linked_users_entity_1.LinkedUsers)
+], DalyActivities.prototype, "linkedUserId", void 0);
 exports.DalyActivities = DalyActivities = __decorate([
     (0, typeorm_1.Entity)('daly_activities')
 ], DalyActivities);

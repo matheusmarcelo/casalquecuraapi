@@ -6,11 +6,11 @@ export declare class DalyActivitiesRepositoryPostgresql implements IDalyActiviti
     private readonly dalyActivityRepository;
     constructor(dalyActivityRepository: Repository<DalyActivities>);
     createDalyActivityAsync(entity: DalyActivities): Promise<void>;
-    getDalyActivitiesAsync(customerId: string): Promise<DalyActivities[]>;
-    getTotalActivitiesWeekAsync(customerId: string): Promise<number>;
-    getCustomerTotalActivitiesDoneAsync(customerId: string): Promise<number>;
-    getCustomerTotalPointsAsync(customerId: string): Promise<number>;
-    getChartData(customerId: string, days: 7 | 15 | 30): Promise<CustomerChartReportDto>;
+    getDalyActivitiesAsync(customerOrLinkedUserId: string): Promise<DalyActivities[]>;
+    getTotalActivitiesWeekAsync(customerOrLinkedUserId: string): Promise<number>;
+    getCustomerTotalActivitiesDoneAsync(customerOrLinkedUserId: string): Promise<number>;
+    getCustomerTotalPointsAsync(customerOrLinkedUserId: string): Promise<number>;
+    getChartData(customerOrLinkedUserId: string, days: 7 | 15 | 30): Promise<CustomerChartReportDto>;
     private groupData;
     private groupByDays;
     private groupByWeek;

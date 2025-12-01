@@ -17,6 +17,7 @@ const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const daly_activities_entity_1 = require("../../../../entitites/daly-activities/daly_activities.entity");
 const month_activities_entity_1 = require("../../../../entitites/mont-activities/month_activities.entity");
+const numeric_helpers_1 = require("../../../../helpers/numeric.helpers");
 const typeorm_2 = require("typeorm");
 let MonthActivitiesRepositoryPostgresql = class MonthActivitiesRepositoryPostgresql {
     monthActivityRepository;
@@ -31,26 +32,53 @@ let MonthActivitiesRepositoryPostgresql = class MonthActivitiesRepositoryPostgre
     async updateMonthActivityAsync(id, totalScore) {
         await this.monthActivityRepository.update(id, { totalScore });
     }
-    async getMonthActivityAsync(customerId, month, year) {
-        return await this.monthActivityRepository.findOne({
-            where: {
-                user: { id: customerId },
-                month,
-                year
-            }
-        });
+    async getMonthActivityAsync(month, year, customerOrLinkedUserId) {
+        const isNumeric = new numeric_helpers_1.NumericHelper().isNumeric(customerOrLinkedUserId || '0');
+        if (isNumeric) {
+            return await this.monthActivityRepository.findOne({
+                where: {
+                    linkedUserId: { id: customerOrLinkedUserId },
+                    month,
+                    year
+                }
+            });
+        }
+        else {
+            return await this.monthActivityRepository.findOne({
+                where: {
+                    user: { id: customerOrLinkedUserId },
+                    month,
+                    year
+                }
+            });
+        }
     }
-    async getMonthlyActivitiesAsync(customerId) {
-        return await this.monthActivityRepository.find({ where: { user: { id: customerId } } });
+    async getMonthlyActivitiesAsync(customerOrLinkedUserId) {
+        const isNumeric = new numeric_helpers_1.NumericHelper().isNumeric(customerOrLinkedUserId);
+        if (isNumeric) {
+            return await this.monthActivityRepository.find({
+                where: { user: { id: customerOrLinkedUserId } }
+            });
+        }
+        else {
+            return await this.monthActivityRepository.find({
+                where: { linkedUserId: { id: customerOrLinkedUserId } }
+            });
+        }
     }
-    async getTotalMonthActivitiesAsync(customerId) {
-        const totalActivitiesThisMonth = await this.dalyActivityRepository
-            .createQueryBuilder('activity')
-            .where('activity.user_id = :userId', { userId: customerId })
-            .andWhere(`activity.completion_date BETWEEN 
-            date_trunc('month', CURRENT_DATE) AND CURRENT_TIMESTAMP`)
-            .getCount();
-        return totalActivitiesThisMonth || 0;
+    async getTotalMonthActivitiesAsync(customerOrLinkedUserId) {
+        const isNumeric = new numeric_helpers_1.NumericHelper().isNumeric(customerOrLinkedUserId);
+        const totalActivitiesThisMonth = this.dalyActivityRepository
+            .createQueryBuilder('activity');
+        if (isNumeric) {
+            totalActivitiesThisMonth.where('activity.linked_user_id = :userId', { userId: customerOrLinkedUserId });
+        }
+        else {
+            totalActivitiesThisMonth.where('activity.user_id = :userId', { userId: customerOrLinkedUserId });
+        }
+        const data = await totalActivitiesThisMonth.andWhere(`activity.completion_date BETWEEN 
+            date_trunc('month', CURRENT_DATE) AND CURRENT_TIMESTAMP`).getCount();
+        return data || 0;
     }
 };
 exports.MonthActivitiesRepositoryPostgresql = MonthActivitiesRepositoryPostgresql;

@@ -13,14 +13,20 @@ exports.CustomerActivityDto = void 0;
 const class_validator_1 = require("class-validator");
 class CustomerActivityDto {
     customer_id;
+    linked_users_id;
     activity_id;
 }
 exports.CustomerActivityDto = CustomerActivityDto;
 __decorate([
+    (0, class_validator_1.ValidateIf)((o) => !o.linked_users_id),
     (0, class_validator_1.IsString)({ message: 'Customer id must be string type' }),
-    (0, class_validator_1.IsNotEmpty)({ message: 'Customer id must have a value' }),
     __metadata("design:type", String)
 ], CustomerActivityDto.prototype, "customer_id", void 0);
+__decorate([
+    (0, class_validator_1.ValidateIf)((o) => !o.customer_id),
+    (0, class_validator_1.IsString)({ message: 'Linked users id must be string type' }),
+    __metadata("design:type", String)
+], CustomerActivityDto.prototype, "linked_users_id", void 0);
 __decorate([
     (0, class_validator_1.IsString)({ message: 'Activity id must be string type' }),
     (0, class_validator_1.IsNotEmpty)({ message: 'Activity id must have a value' }),

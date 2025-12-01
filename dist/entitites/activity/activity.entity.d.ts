@@ -8,4 +8,5 @@ export declare class Activity {
     createdAt?: Date;
     updatedAt?: Date;
     activities?: CustomerActivity[];
+    isLinkedUserActivity?: boolean;
 }

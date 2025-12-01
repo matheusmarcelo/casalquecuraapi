@@ -21,6 +21,7 @@ let Activity = class Activity {
     createdAt;
     updatedAt;
     activities;
+    isLinkedUserActivity;
 };
 exports.Activity = Activity;
 __decorate([

@@ -12,12 +12,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.MonthActivities = void 0;
 const typeorm_1 = require("typeorm");
 const customer_entity_1 = require("../customer/customer.entity");
+const linked_users_entity_1 = require("../linked-users/linked_users.entity");
 let MonthActivities = class MonthActivities {
     id;
     user;
     totalScore;
     month;
     year;
+    linkedUserId;
 };
 exports.MonthActivities = MonthActivities;
 __decorate([
@@ -41,6 +43,11 @@ __decorate([
     (0, typeorm_1.Column)({ type: 'int' }),
     __metadata("design:type", Number)
 ], MonthActivities.prototype, "year", void 0);
+__decorate([
+    (0, typeorm_1.ManyToOne)(type => linked_users_entity_1.LinkedUsers, (linkedUsers) => linkedUsers.id),
+    (0, typeorm_1.JoinColumn)({ name: 'linked_user_id' }),
+    __metadata("design:type", linked_users_entity_1.LinkedUsers)
+], MonthActivities.prototype, "linkedUserId", void 0);
 exports.MonthActivities = MonthActivities = __decorate([
     (0, typeorm_1.Entity)('month_activities')
 ], MonthActivities);

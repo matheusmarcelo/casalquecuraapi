@@ -12,11 +12,17 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.LinkedUsers = void 0;
 const typeorm_1 = require("typeorm");
 const customer_entity_1 = require("../customer/customer.entity");
+const customer_activity_entity_1 = require("../customer-activity/customer-activity.entity");
+const daly_activities_entity_1 = require("../daly-activities/daly_activities.entity");
+const month_activities_entity_1 = require("../mont-activities/month_activities.entity");
 let LinkedUsers = class LinkedUsers {
     id;
     user1;
     user2;
     createdAt;
+    customerActivities;
+    dalyActivities;
+    monthActivities;
 };
 exports.LinkedUsers = LinkedUsers;
 __decorate([
@@ -37,6 +43,18 @@ __decorate([
     (0, typeorm_1.CreateDateColumn)({ name: 'created_at', type: 'timestamp' }),
     __metadata("design:type", Date)
 ], LinkedUsers.prototype, "createdAt", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(type => customer_activity_entity_1.CustomerActivity, (customer_activity) => customer_activity.id),
+    __metadata("design:type", Array)
+], LinkedUsers.prototype, "customerActivities", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(type => daly_activities_entity_1.DalyActivities, (daly_activities) => daly_activities.id),
+    __metadata("design:type", Array)
+], LinkedUsers.prototype, "dalyActivities", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(type => month_activities_entity_1.MonthActivities, (month_activities) => month_activities.id),
+    __metadata("design:type", Array)
+], LinkedUsers.prototype, "monthActivities", void 0);
 exports.LinkedUsers = LinkedUsers = __decorate([
     (0, typeorm_1.Entity)('linked_users')
 ], LinkedUsers);

@@ -13,10 +13,12 @@ exports.CustomerActivity = void 0;
 const typeorm_1 = require("typeorm");
 const customer_entity_1 = require("../customer/customer.entity");
 const activity_entity_1 = require("../activity/activity.entity");
+const linked_users_entity_1 = require("../linked-users/linked_users.entity");
 let CustomerActivity = class CustomerActivity {
     id;
     customer;
     activity;
+    linkedUserId;
 };
 exports.CustomerActivity = CustomerActivity;
 __decorate([
@@ -33,6 +35,11 @@ __decorate([
     (0, typeorm_1.JoinColumn)({ name: 'activity_id' }),
     __metadata("design:type", activity_entity_1.Activity)
 ], CustomerActivity.prototype, "activity", void 0);
+__decorate([
+    (0, typeorm_1.ManyToOne)(type => linked_users_entity_1.LinkedUsers, (linkedUsers) => linkedUsers.id),
+    (0, typeorm_1.JoinColumn)({ name: 'linked_user_id' }),
+    __metadata("design:type", linked_users_entity_1.LinkedUsers)
+], CustomerActivity.prototype, "linkedUserId", void 0);
 exports.CustomerActivity = CustomerActivity = __decorate([
     (0, typeorm_1.Entity)({ name: 'user_activities' })
 ], CustomerActivity);
