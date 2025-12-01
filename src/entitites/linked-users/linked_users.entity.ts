@@ -1,5 +1,8 @@
-import { CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Customer } from "../customer/customer.entity";
+import { CustomerActivity } from "../customer-activity/customer-activity.entity";
+import { DalyActivities } from "../daly-activities/daly_activities.entity";
+import { MonthActivities } from "../mont-activities/month_activities.entity";
 
 @Entity('linked_users')
 export class LinkedUsers {
@@ -16,4 +19,13 @@ export class LinkedUsers {
 
     @CreateDateColumn({ name: 'created_at', type: 'timestamp' })
     createdAt?: Date;
+
+    @OneToMany(type => CustomerActivity, (customer_activity) => customer_activity.id)
+    customerActivities?: CustomerActivity[];
+
+    @OneToMany(type => DalyActivities, (daly_activities) => daly_activities.id)
+    dalyActivities?: DalyActivities[];
+
+    @OneToMany(type => MonthActivities, (month_activities) => month_activities.id)
+    monthActivities?: MonthActivities[];
 }
