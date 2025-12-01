@@ -14,6 +14,7 @@ import { MonthActivitiesDto } from 'src/dtos/month_activities/month_activities.d
 import { Activity } from 'src/entitites/activity/activity.entity';
 import { Customer } from 'src/entitites/customer/customer.entity';
 import { DalyActivities } from 'src/entitites/daly-activities/daly_activities.entity';
+import { LinkedUsers } from 'src/entitites/linked-users/linked_users.entity';
 import { MonthActivities } from 'src/entitites/mont-activities/month_activities.entity';
 
 @Injectable()
@@ -112,11 +113,17 @@ export class ActivityService implements IActivityService {
         const dalyActivity: DalyActivities = {
             score: activity!.score,
             activity: { id: dalyActivityDto.activityId } as Activity,
-            user: { id: dalyActivityDto.userId } as Customer,
         }
 
+        if (dalyActivityDto.userId) {
+            dalyActivity.user = { id: dalyActivityDto.userId } as Customer;
+        } else if (dalyActivityDto.linked_users_id) {
+            dalyActivity.linkedUserId = { id: dalyActivityDto.linked_users_id } as LinkedUsers
+        }
+
+        console.log(dalyActivity)
         await this.dalyActivityRepository.createDalyActivityAsync(dalyActivity);
-        await this.createOrUpdateMonthActivityAsync(dalyActivityDto.userId, activity!.score);
+        await this.createOrUpdateMonthActivityAsync(dalyActivityDto, activity!.score);
     }
 
     async getDalyActivitiesAsync(customerId: string): Promise<DalyActivities[]> {
@@ -146,17 +153,31 @@ export class ActivityService implements IActivityService {
         }
     }
 
-    private async createOrUpdateMonthActivityAsync(customerId: string, activityScore: number): Promise<void> {
+    private async createOrUpdateMonthActivityAsync(dalyActivitiesDto: DalyActivitiesDto, activityScore: number): Promise<void> {
         const { month, year } = this.getMonthAndYear();
-        const monthActivityFound = await this.monthActivityRepository.getMonthActivityAsync(customerId, month, year);
+        let userOrLinkedUserId = dalyActivitiesDto.userId ? dalyActivitiesDto.userId : dalyActivitiesDto.linked_users_id;
+
+        if (!userOrLinkedUserId) {
+            throw new HttpException('You must inform customer or linked users id', HttpStatus.BAD_REQUEST);
+        }
+
+        const monthActivityFound = await this.monthActivityRepository.getMonthActivityAsync(month, year, userOrLinkedUserId);
 
         if (!monthActivityFound) {
             const monthActivity: MonthActivities = {
                 month,
                 year,
                 totalScore: activityScore,
-                user: { id: customerId } as Customer
             }
+
+            if (dalyActivitiesDto.userId) {
+                monthActivity.user = { id: dalyActivitiesDto.userId } as Customer;
+
+            } else if (dalyActivitiesDto.linked_users_id) {
+                monthActivity.linkedUserId = { id: dalyActivitiesDto.linked_users_id } as LinkedUsers;
+
+            }
+
 
             await this.monthActivityRepository.createMonthActivityAsync(monthActivity);
         } else {
