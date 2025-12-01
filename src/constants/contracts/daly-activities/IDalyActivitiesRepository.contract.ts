@@ -3,9 +3,9 @@ import { DalyActivities } from "src/entitites/daly-activities/daly_activities.en
 
 export interface IDalyActivitiesRepository {
     createDalyActivityAsync(entity: DalyActivities): Promise<void>;
-    getDalyActivitiesAsync(customerId: string): Promise<DalyActivities[]>;
-    getTotalActivitiesWeekAsync(customerId: string): Promise<number>;
-    getChartData(customerId: string, days: 7 | 15 | 30): Promise<CustomerChartReportDto>;
-    getCustomerTotalActivitiesDoneAsync(customerId: string): Promise<number>;
-    getCustomerTotalPointsAsync(customerId: string): Promise<number>;
+    getDalyActivitiesAsync(customerOrLinkedUserId: string): Promise<DalyActivities[]>;
+    getTotalActivitiesWeekAsync(customerOrLinkedUserId: string): Promise<number>;
+    getChartData(customerOrLinkedUserId: string, days: 7 | 15 | 30): Promise<CustomerChartReportDto>;
+    getCustomerTotalActivitiesDoneAsync(customerOrLinkedUserId: string): Promise<number>;
+    getCustomerTotalPointsAsync(customerOrLinkedUserId: string): Promise<number>;
 }

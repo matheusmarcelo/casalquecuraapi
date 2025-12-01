@@ -7,7 +7,8 @@ export interface ICustomerActivityRepository {
     getCustomerActivitiesByActivityIdAsync(activityId: string): Promise<CustomerActivity[]>;
     getCustomerActivityAsync(id: string): Promise<CustomerActivity | null>;
     deleteCustomerActivityAsync(id: string): Promise<void>;
-    getCustomerActivityByCustomerIdAndActivityIdAsync(customerId: string, activityId: string): Promise<CustomerActivity | null>;
+    getCustomerActivityByCustomerIdAndActivityIdAsync(activityId: string, customerId?: string): Promise<CustomerActivity | null>;
+    getCustomerActivityByLinkedUserIdAndActivityIdAsync(activityId: string, linkedUserId?: string): Promise<CustomerActivity | null>;
     assignCustomersToActivityAsync(activityId: string, customerIds: string[]): Promise<void>
     deleteMultipleActivitiesAsync(ids: string[]): Promise<void>
 }
