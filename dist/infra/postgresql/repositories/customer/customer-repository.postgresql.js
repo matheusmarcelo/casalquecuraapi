@@ -34,15 +34,23 @@ let CustomerRepositoryPostgresql = class CustomerRepositoryPostgresql {
         });
     }
     async getCustomersAsync(params) {
-        const searchParams = {};
-        if (params?.name) {
-            searchParams.name = (0, typeorm_2.ILike)(`%${params.name}%`);
-        }
-        if (params?.email) {
-            searchParams.email = (0, typeorm_2.ILike)(`%${params.email}%`);
-        }
+        const hasValidSearch = params?.search && params.search.trim().length > 0;
+        const whereCondition = hasValidSearch
+            ? [
+                { name: (0, typeorm_2.ILike)(`%${params.search}%`) },
+                { email: (0, typeorm_2.ILike)(`%${params.search}%`) }
+            ]
+            : {};
         const customers = await this.customerRepository.find({
-            where: searchParams,
+            where: whereCondition,
+            select: [
+                'id',
+                'name',
+                'email',
+                'date_of_birth',
+                'phone',
+                'createdAt'
+            ]
         });
         return customers;
     }

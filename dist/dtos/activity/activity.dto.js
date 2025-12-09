@@ -18,6 +18,7 @@ class ActivityDto {
     score;
     isGeneral;
     customerIds;
+    id;
 }
 exports.ActivityDto = ActivityDto;
 __decorate([

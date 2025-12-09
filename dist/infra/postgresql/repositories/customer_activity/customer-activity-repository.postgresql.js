@@ -142,6 +142,39 @@ let CustomerActivityRepositoryPostgresql = class CustomerActivityRepositoryPostg
     async deleteMultipleActivitiesAsync(ids) {
         await this.customerActivityRepository.delete({ id: (0, typeorm_2.In)(ids) });
     }
+    async getCustomerOrCoupleActivitiesAsync(type, id) {
+        let activities = [];
+        if (type?.trim().toLowerCase() === 'couple') {
+            const response = await this.customerActivityRepository.find({
+                where: { linkedUserId: { id: id } },
+                select: [
+                    'activity',
+                ],
+                relations: ['activity']
+            });
+            activities = response.map(r => this.mapActivityToActivityDto(r.activity));
+        }
+        else {
+            const response = await this.customerActivityRepository.find({
+                where: { customer: { id } },
+                select: [
+                    'activity',
+                ],
+                relations: ['activity']
+            });
+            activities = response.map(r => this.mapActivityToActivityDto(r.activity));
+        }
+        return activities;
+    }
+    mapActivityToActivityDto(activity) {
+        return {
+            id: activity.id,
+            title: activity.title,
+            description: activity.description,
+            isGeneral: activity.isGeneral || false,
+            score: activity.score
+        };
+    }
 };
 exports.CustomerActivityRepositoryPostgresql = CustomerActivityRepositoryPostgresql;
 exports.CustomerActivityRepositoryPostgresql = CustomerActivityRepositoryPostgresql = __decorate([

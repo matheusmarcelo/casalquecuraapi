@@ -3,5 +3,6 @@ export declare class ActivityDto {
     description: string;
     score: number;
     isGeneral: boolean;
-    customerIds: string[];
+    customerIds?: string[];
+    id?: string;
 }

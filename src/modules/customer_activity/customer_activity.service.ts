@@ -3,6 +3,7 @@ import type { IActivityRepository } from 'src/constants/contracts/activity/IActi
 import type { ICustomerActivityRepository } from 'src/constants/contracts/customer-activity/ICustomerActivitiesRepository.contract';
 import { ICustomerActivityService } from 'src/constants/contracts/customer-activity/ICustomerActivitiesService.contract';
 import { DITokensRepository } from 'src/constants/enums/DITokens/DITokens.enum';
+import { ActivityDto } from 'src/dtos/activity/activity.dto';
 import { CustomerActivityDto } from 'src/dtos/customer_activity/customerActivity.dto';
 import { Activity } from 'src/entitites/activity/activity.entity';
 import { CustomerActivity } from 'src/entitites/customer-activity/customer-activity.entity';
@@ -67,5 +68,8 @@ export class CustomerActivityService implements ICustomerActivityService {
         }
 
         await this.customerActivityRepository.deleteCustomerActivityAsync(id);
+    }
+    async getCustomerOrCoupleActivitiesAsync(type: string, id: string): Promise<ActivityDto[]> {
+        return await this.customerActivityRepository.getCustomerOrCoupleActivitiesAsync(type, id);
     }
 }

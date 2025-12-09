@@ -61,6 +61,9 @@ let CustomerActivityService = class CustomerActivityService {
         }
         await this.customerActivityRepository.deleteCustomerActivityAsync(id);
     }
+    async getCustomerOrCoupleActivitiesAsync(type, id) {
+        return await this.customerActivityRepository.getCustomerOrCoupleActivitiesAsync(type, id);
+    }
 };
 exports.CustomerActivityService = CustomerActivityService;
 exports.CustomerActivityService = CustomerActivityService = __decorate([

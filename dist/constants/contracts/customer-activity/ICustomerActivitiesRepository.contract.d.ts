@@ -1,3 +1,4 @@
+import { ActivityDto } from "src/dtos/activity/activity.dto";
 import { Activity } from "src/entitites/activity/activity.entity";
 import { CustomerActivity } from "src/entitites/customer-activity/customer-activity.entity";
 export interface ICustomerActivityRepository {
@@ -10,4 +11,5 @@ export interface ICustomerActivityRepository {
     getCustomerActivityByLinkedUserIdAndActivityIdAsync(activityId: string, linkedUserId?: string): Promise<CustomerActivity | null>;
     assignCustomersToActivityAsync(activityId: string, customerIds: string[]): Promise<void>;
     deleteMultipleActivitiesAsync(ids: string[]): Promise<void>;
+    getCustomerOrCoupleActivitiesAsync(type: string, id: string): Promise<ActivityDto[]>;
 }

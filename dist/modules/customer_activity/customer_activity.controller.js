@@ -33,6 +33,9 @@ let CustomerActivityController = class CustomerActivityController {
     async deleteCustomerActivityAsync(id) {
         await this.customerActivityService.deleteCustomerActivityAsync(id);
     }
+    async getCustomerOrCoupleActivitiesAsync(type, id) {
+        return this.customerActivityService.getCustomerOrCoupleActivitiesAsync(type, id);
+    }
 };
 exports.CustomerActivityController = CustomerActivityController;
 __decorate([
@@ -60,6 +63,16 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], CustomerActivityController.prototype, "deleteCustomerActivityAsync", null);
+__decorate([
+    (0, common_1.Get)('/:type/:id'),
+    (0, common_1.HttpCode)(common_1.HttpStatus.OK),
+    (0, common_1.UseGuards)(auth_guard_1.AuthGuard, admin_guard_1.AdminGuard),
+    __param(0, (0, common_1.Param)('type')),
+    __param(1, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String]),
+    __metadata("design:returntype", Promise)
+], CustomerActivityController.prototype, "getCustomerOrCoupleActivitiesAsync", null);
 exports.CustomerActivityController = CustomerActivityController = __decorate([
     (0, common_1.Controller)('customer/activities'),
     __param(0, (0, common_1.Inject)(DITokens_enum_1.DITokensService.CUSTOMER_ACTIVITY_SERVICE)),
