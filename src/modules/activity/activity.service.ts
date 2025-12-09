@@ -30,6 +30,7 @@ export class ActivityService implements IActivityService {
         @Inject(DITokensRepository.MONTH_ACTIVITIES_REPOSITORY)
         private readonly monthActivityRepository: IMonthActivitiesRepository,
     ) { }
+
     async createActivityAsync(activityDto: ActivityDto): Promise<void> {
         const activity: Activity = {
             title: activityDto.title,
@@ -42,11 +43,11 @@ export class ActivityService implements IActivityService {
 
         if (!activityDto.isGeneral) {
 
-            if (activityDto.customerIds.length <= 0) {
+            if (activityDto.customerIds!.length <= 0) {
                 throw new HttpException('Empty customer id list', HttpStatus.BAD_REQUEST);
             }
 
-            await this.customerActivityRepository.assignCustomersToActivityAsync(activityCreated.id as string, activityDto.customerIds);
+            await this.customerActivityRepository.assignCustomersToActivityAsync(activityCreated.id as string, activityDto.customerIds!);
         }
     }
 
@@ -82,11 +83,11 @@ export class ActivityService implements IActivityService {
 
         if (!activity.isGeneral) {
 
-            if (activity.customerIds.length <= 0) {
+            if (activity.customerIds!.length <= 0) {
                 throw new HttpException('Empty customer id list', HttpStatus.BAD_REQUEST);
             }
 
-            await this.customerActivityRepository.assignCustomersToActivityAsync(id, activity.customerIds);
+            await this.customerActivityRepository.assignCustomersToActivityAsync(id, activity.customerIds!);
         }
         else {
             const customerActivities = await this.customerActivityRepository.getCustomerActivitiesByActivityIdAsync(id);

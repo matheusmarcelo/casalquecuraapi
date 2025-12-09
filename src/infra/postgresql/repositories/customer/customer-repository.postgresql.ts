@@ -28,18 +28,24 @@ export class CustomerRepositoryPostgresql implements ICustomerRepository {
     }
 
     async getCustomersAsync(params: FindCustomersDto): Promise<Customer[]> {
-        const searchParams: FindOptionsWhere<Customer> = {};
-
-        if (params?.name) {
-            searchParams.name = ILike(`%${params.name}%`);
-        }
-
-        if (params?.email) {
-            searchParams.email = ILike(`%${params.email}%`);
-        }
+        const hasValidSearch = params?.search && params.search.trim().length > 0;
+        const whereCondition = hasValidSearch
+            ? [
+                { name: ILike(`%${params.search}%`) },
+                { email: ILike(`%${params.search}%`) }
+            ]
+            : {};
 
         const customers = await this.customerRepository.find({
-            where: searchParams,
+            where: whereCondition,
+            select: [
+                'id',
+                'name',
+                'email',
+                'date_of_birth',
+                'phone',
+                'createdAt'
+            ]
         });
 
         return customers;

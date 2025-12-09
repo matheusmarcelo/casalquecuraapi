@@ -27,5 +27,7 @@ export class ActivityDto {
     @ValidateIf(o => o.isGeneral === false)
     @IsNotEmpty({ message: 'CustomerIds must be a value' })
     @IsArray({ message: 'CustomerIds must be a array type' })
-    customerIds: string[];
+    customerIds?: string[];
+
+    id?: string;
 }

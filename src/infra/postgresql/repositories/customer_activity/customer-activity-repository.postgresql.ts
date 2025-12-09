@@ -3,9 +3,11 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { ICustomerActivityRepository } from 'src/constants/contracts/customer-activity/ICustomerActivitiesRepository.contract';
 import type { ILinkedUsersRepository } from 'src/constants/contracts/linked-users/ILinkedUsersRepository.contract';
 import { DITokensRepository } from 'src/constants/enums/DITokens/DITokens.enum';
+import { ActivityDto } from 'src/dtos/activity/activity.dto';
 import { Activity } from 'src/entitites/activity/activity.entity';
 import { CustomerActivity } from 'src/entitites/customer-activity/customer-activity.entity';
 import { DalyActivities } from 'src/entitites/daly-activities/daly_activities.entity';
+import { NumericHelper } from 'src/helpers/numeric.helpers';
 import { In, Repository } from 'typeorm';
 
 @Global()
@@ -185,5 +187,43 @@ export class CustomerActivityRepositoryPostgresql implements ICustomerActivityRe
 
     async deleteMultipleActivitiesAsync(ids: string[]): Promise<void> {
         await this.customerActivityRepository.delete({ id: In(ids) });
+    }
+
+    async getCustomerOrCoupleActivitiesAsync(type: string, id: string): Promise<ActivityDto[]> {
+        let activities: ActivityDto[] = [];
+
+        if (type?.trim().toLowerCase() === 'couple') {
+            const response = await this.customerActivityRepository.find({
+                where: { linkedUserId: { id: id } },
+                select: [
+                    'activity',
+                ],
+                relations: ['activity']
+            });
+
+            activities = response.map(r => this.mapActivityToActivityDto(r.activity));
+        } else {
+            const response = await this.customerActivityRepository.find({
+                where: { customer: { id } },
+                select: [
+                    'activity',
+                ],
+                relations: ['activity']
+            });
+
+            activities = response.map(r => this.mapActivityToActivityDto(r.activity));
+        }
+
+        return activities;
+    }
+
+    private mapActivityToActivityDto(activity: Activity): ActivityDto {
+        return {
+            id: activity.id,
+            title: activity.title,
+            description: activity.description,
+            isGeneral: activity.isGeneral || false,
+            score: activity.score
+        }
     }
 }
