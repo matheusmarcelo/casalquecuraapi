@@ -48,6 +48,8 @@ let AuthService = class AuthService {
             user_role: customer.role,
             expiresIn: Date.now() + +this.configService.get('JWT_EXPIRATION_TIME') * 1000,
             userId: customer.id,
+            name: customer?.name,
+            email: customer?.email,
         };
     }
     async recoverPassword(email, ipAddress) {

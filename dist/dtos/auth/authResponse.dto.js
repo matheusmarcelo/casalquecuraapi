@@ -6,6 +6,8 @@ class AuthResponseDto {
     user_role;
     expiresIn;
     userId;
+    name;
+    email;
 }
 exports.AuthResponseDto = AuthResponseDto;
 //# sourceMappingURL=authResponse.dto.js.map
